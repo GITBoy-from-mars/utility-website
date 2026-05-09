@@ -15,7 +15,7 @@ const ImageToText = () => {
     setProcessing(true); setText('');
     try {
       const fd = new FormData(); fd.append('file', files[0]);
-      const res = await fetch('/api/tools/image-to-text/extract', { method: 'POST', body: fd });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/image-to-text/extract`, { method: 'POST', body: fd });
       if (!res.ok) throw new Error('Failed');
       const data = await res.json();
       setText(data.text);

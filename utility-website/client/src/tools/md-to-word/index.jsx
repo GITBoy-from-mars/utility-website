@@ -21,7 +21,7 @@ const MdToWord = () => {
       try {
         const formData = new FormData();
         formData.append('file', files[i]);
-        const res = await fetch('/api/tools/md-to-word/convert', { method: 'POST', body: formData });
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/md-to-word/convert`, { method: 'POST', body: formData });
         if (!res.ok) throw new Error('Conversion failed');
         const blob = await res.blob();
         const url = URL.createObjectURL(blob);

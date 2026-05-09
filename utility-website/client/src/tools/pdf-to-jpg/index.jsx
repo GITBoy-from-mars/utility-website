@@ -13,7 +13,7 @@ const PdfToJpg = () => {
     setLoading(true); setError('');
     try {
       const fd = new FormData(); fd.append('file', file); fd.append('format', format);
-      const res = await fetch('/api/tools/pdf-to-jpg/convert', { method: 'POST', body: fd });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/pdf-to-jpg/convert`, { method: 'POST', body: fd });
       if (!res.ok) throw new Error('Conversion failed');
       const blob = await res.blob();
       const ext = blob.type.includes('zip') ? 'zip' : format;

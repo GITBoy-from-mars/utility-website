@@ -16,7 +16,7 @@ const ScreenshotToPdf = () => {
     try {
       const fd = new FormData();
       files.forEach(f => fd.append('files', f));
-      const res = await fetch('/api/tools/screenshot-to-pdf/convert', { method: 'POST', body: fd });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/screenshot-to-pdf/convert`, { method: 'POST', body: fd });
       if (!res.ok) throw new Error('Failed');
       const blob = await res.blob();
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob);

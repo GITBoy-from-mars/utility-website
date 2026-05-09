@@ -11,7 +11,7 @@ const DnsLookup = () => {
   const lookup = async () => {
     if (!domain) return; setLoading(true); setError(''); setResults(null);
     try {
-      const res = await fetch(`/api/tools/dns-lookup/lookup`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ domain }) });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/dns-lookup/lookup`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ domain }) });
       if (!res.ok) throw new Error('Lookup failed');
       setResults(await res.json());
     } catch (e) { setError(e.message); } finally { setLoading(false); }

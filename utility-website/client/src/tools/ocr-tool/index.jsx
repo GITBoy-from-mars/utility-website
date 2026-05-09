@@ -16,7 +16,7 @@ const OcrTool = () => {
     setProcessing(true); setError(''); setText('');
     try {
       const fd = new FormData(); fd.append('file', files[0]);
-      const res = await fetch('/api/tools/ocr-tool/extract', { method: 'POST', body: fd });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/ocr-tool/extract`, { method: 'POST', body: fd });
       if (!res.ok) throw new Error('OCR failed');
       const data = await res.json();
       setText(data.text);

@@ -12,7 +12,7 @@ const RotatePdfPages = () => {
     if (!files.length) return; setProcessing(true);
     try {
       const fd = new FormData(); fd.append('file', files[0]); fd.append('angle', angle); fd.append('pages', pages);
-      const res = await fetch('/api/tools/rotate-pdf-pages/rotate', { method: 'POST', body: fd });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/rotate-pdf-pages/rotate`, { method: 'POST', body: fd });
       if (!res.ok) throw new Error('Failed');
       const blob = await res.blob();
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'rotated.pdf'; a.click();

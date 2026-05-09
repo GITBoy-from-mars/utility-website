@@ -10,7 +10,7 @@ const PingTest = () => {
   const ping = async () => {
     if (!host) return; setPinging(true);
     try {
-      const res = await fetch('/api/tools/ping-test/ping', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ host }) });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/ping-test/ping`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ host }) });
       const data = await res.json();
       setResults(prev => [data, ...prev.slice(0, 9)]);
     } catch { setResults(prev => [{ host, status: 'error', message: 'Request failed' }, ...prev.slice(0, 9)]); }

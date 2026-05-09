@@ -20,7 +20,7 @@ const BackgroundRemover = () => {
       nr.push({ status: 'processing' }); setResults([...nr]);
       try {
         const fd = new FormData(); fd.append('file', files[i]);
-        const res = await fetch('/api/tools/background-remover/remove', { method: 'POST', body: fd });
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/background-remover/remove`, { method: 'POST', body: fd });
         if (!res.ok) throw new Error('Failed');
         const blob = await res.blob();
         const url = URL.createObjectURL(blob);

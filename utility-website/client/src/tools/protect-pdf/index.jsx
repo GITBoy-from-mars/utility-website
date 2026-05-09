@@ -13,7 +13,7 @@ const ProtectPdf = () => {
     setLoading(true); setError('');
     try {
       const fd = new FormData(); fd.append('file', file); fd.append('password', password);
-      const res = await fetch('/api/tools/protect-pdf/protect', { method: 'POST', body: fd });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/protect-pdf/protect`, { method: 'POST', body: fd });
       if (!res.ok) throw new Error('Failed to protect PDF');
       const blob = await res.blob();
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `protected_${file.name}`; a.click();

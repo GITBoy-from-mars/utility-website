@@ -11,7 +11,7 @@ const UnlockPdf = () => {
     if (!files.length) return; setProcessing(true);
     try {
       const fd = new FormData(); fd.append('file', files[0]); fd.append('password', password);
-      const res = await fetch('/api/tools/unlock-pdf/unlock', { method: 'POST', body: fd });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/unlock-pdf/unlock`, { method: 'POST', body: fd });
       if (!res.ok) { const d = await res.json(); throw new Error(d.error || 'Failed'); }
       const blob = await res.blob();
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'unlocked.pdf'; a.click();

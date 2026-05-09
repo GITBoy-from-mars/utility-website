@@ -15,7 +15,7 @@ const PdfMetadataEditor = () => {
     try {
       const fd = new FormData(); fd.append('file', files[0]);
       fd.append('title', title); fd.append('author', author); fd.append('subject', subject); fd.append('keywords', keywords);
-      const res = await fetch('/api/tools/pdf-metadata-editor/edit', { method: 'POST', body: fd });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/pdf-metadata-editor/edit`, { method: 'POST', body: fd });
       if (!res.ok) throw new Error('Failed');
       const blob = await res.blob();
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'edited-metadata.pdf'; a.click();

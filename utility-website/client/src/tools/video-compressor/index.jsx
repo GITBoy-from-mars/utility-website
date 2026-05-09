@@ -18,7 +18,7 @@ const VideoCompressor = () => {
     setProcessing(true); setError(''); setDone(false);
     try {
       const fd = new FormData(); fd.append('file', files[0]); fd.append('quality', quality);
-      const res = await fetch('/api/tools/video-compressor/compress', { method: 'POST', body: fd });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/video-compressor/compress`, { method: 'POST', body: fd });
       if (!res.ok) throw new Error('Compression failed');
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);

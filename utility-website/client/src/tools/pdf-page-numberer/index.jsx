@@ -14,7 +14,7 @@ const PdfPageNumberer = () => {
       const fd = new FormData();
       fd.append('file', files[0]);
       fd.append('position', position);
-      const res = await fetch('/api/tools/pdf-page-numberer/number', { method: 'POST', body: fd });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/pdf-page-numberer/number`, { method: 'POST', body: fd });
       if (!res.ok) throw new Error('Failed');
       const blob = await res.blob();
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'numbered.pdf'; a.click();

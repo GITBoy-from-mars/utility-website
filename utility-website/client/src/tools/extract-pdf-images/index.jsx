@@ -10,7 +10,7 @@ const ExtractPdfImages = () => {
     if (!files.length) return; setProcessing(true);
     try {
       const fd = new FormData(); fd.append('file', files[0]);
-      const res = await fetch('/api/tools/extract-pdf-images/extract', { method: 'POST', body: fd });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/extract-pdf-images/extract`, { method: 'POST', body: fd });
       if (!res.ok) throw new Error('Failed');
       const blob = await res.blob();
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'extracted-images.zip'; a.click();

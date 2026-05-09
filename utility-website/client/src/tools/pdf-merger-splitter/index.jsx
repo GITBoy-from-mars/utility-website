@@ -21,7 +21,7 @@ const PdfMergerSplitter = () => {
       files.forEach(f => fd.append('files', f));
       fd.append('mode', mode);
       if (mode === 'split') fd.append('pages', splitPages);
-      const res = await fetch('/api/tools/pdf-merger-splitter/process', { method: 'POST', body: fd });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/pdf-merger-splitter/process`, { method: 'POST', body: fd });
       if (!res.ok) throw new Error('Processing failed');
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);

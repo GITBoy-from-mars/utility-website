@@ -35,7 +35,7 @@ const ImageResizerCropper = () => {
       try {
         const fd = new FormData(); fd.append('file', files[i]);
         fd.append('width', width); fd.append('height', height); fd.append('mode', mode);
-        const res = await fetch('/api/tools/image-resizer-cropper/process', { method: 'POST', body: fd });
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/image-resizer-cropper/process`, { method: 'POST', body: fd });
         if (!res.ok) throw new Error('Failed');
         const blob = await res.blob();
         const a = document.createElement('a'); a.href = URL.createObjectURL(blob);

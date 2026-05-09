@@ -51,7 +51,7 @@ const EsignTool = () => {
       const fd = new FormData(); fd.append('file', files[0]);
       fd.append('signature', signatureData); fd.append('page', page);
       fd.append('posX', posX); fd.append('posY', posY);
-      const res = await fetch('/api/tools/esign-tool/sign', { method: 'POST', body: fd });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/esign-tool/sign`, { method: 'POST', body: fd });
       if (!res.ok) throw new Error('Failed');
       const blob = await res.blob();
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob);

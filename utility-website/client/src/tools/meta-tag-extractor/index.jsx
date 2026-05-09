@@ -11,7 +11,7 @@ const MetaTagExtractor = () => {
   const extract = async () => {
     if (!url) return; setLoading(true); setError(''); setResults(null);
     try {
-      const res = await fetch('/api/tools/meta-tag-extractor/extract', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/meta-tag-extractor/extract`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) });
       if (!res.ok) throw new Error('Failed');
       setResults(await res.json());
     } catch (e) { setError(e.message); } finally { setLoading(false); }

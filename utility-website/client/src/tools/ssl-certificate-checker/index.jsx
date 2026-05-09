@@ -11,7 +11,7 @@ const SslChecker = () => {
   const check = async () => {
     if (!domain) return; setLoading(true); setError(''); setResult(null);
     try {
-      const res = await fetch('/api/tools/ssl-certificate-checker/check', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ domain }) });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tools/ssl-certificate-checker/check`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ domain }) });
       if (!res.ok) throw new Error('Check failed');
       setResult(await res.json());
     } catch (e) { setError(e.message); } finally { setLoading(false); }

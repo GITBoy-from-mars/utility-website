@@ -1,0 +1,1 @@
+export default { id: 'break-even-calculator', name: 'Break-Even Calculator', slug: 'break-even-calculator', description: 'Calculate the break-even point for your business in units and revenue', category: 'financial-tools', icon: 'Calculator', keywords: ['break-even', 'business', 'fixed cost', 'variable cost'] };

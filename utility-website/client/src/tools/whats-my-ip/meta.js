@@ -1,0 +1,1 @@
+export default { id: 'whats-my-ip', name: 'What is My IP', slug: 'whats-my-ip', description: 'Find your public IP address and approximate location instantly', category: 'seo-tools', icon: 'Globe', keywords: ['ip', 'address', 'location', 'public', 'find'] };

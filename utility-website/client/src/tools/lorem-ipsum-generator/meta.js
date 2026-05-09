@@ -1,0 +1,1 @@
+export default { id: 'lorem-ipsum-generator', name: 'Lorem Ipsum Generator', slug: 'lorem-ipsum-generator', description: 'Generate professional placeholder text in paragraphs, sentences, or words', category: 'generators', icon: 'FileText', keywords: ['lorem', 'ipsum', 'placeholder', 'text', 'dummy'] };

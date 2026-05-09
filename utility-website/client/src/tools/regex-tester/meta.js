@@ -1,0 +1,1 @@
+export default { id: 'regex-tester', name: 'Regex Tester', slug: 'regex-tester', description: 'Test regular expressions live with match highlighting and capture groups', category: 'developer-tools', icon: 'Code', keywords: ['regex', 'regular', 'expression', 'test', 'match', 'pattern'] };

@@ -1,0 +1,1 @@
+export default { id: 'image-converter', name: 'Image Converter', slug: 'image-converter', description: 'Convert images between PNG, JPG, WebP, GIF, BMP, and TIFF formats', category: 'converters', icon: 'ImageConvert', keywords: ['image', 'convert', 'png', 'jpg', 'webp', 'gif', 'bmp', 'tiff'], batchSupport: true, acceptedFiles: 'image/*', maxFileSize: '50MB' };

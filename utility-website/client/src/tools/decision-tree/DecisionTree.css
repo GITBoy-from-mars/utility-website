@@ -1,0 +1,68 @@
+.dt-tool{display:flex;flex-direction:column;gap:12px}
+
+/* Toolbar */
+.dt-toolbar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--neutral-50);border:1px solid var(--neutral-200);border-radius:var(--radius-md);flex-wrap:wrap;gap:12px}
+.dt-toolbar-left,.dt-toolbar-right{display:flex;align-items:center;gap:10px}
+.dt-search{padding:6px 12px;border:1px solid var(--neutral-200);border-radius:var(--radius-sm);font-size:0.813rem;width:200px;background:var(--neutral-0)}
+.dt-stats{font-size:0.75rem;color:var(--neutral-400);font-weight:600}
+.dt-zoom{display:flex;align-items:center;gap:4px;padding:2px;background:var(--neutral-100);border-radius:var(--radius-sm)}
+.dt-zoom-btn{width:24px;height:24px;border:none;background:var(--neutral-0);border-radius:3px;cursor:pointer;font-size:1rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.dt-zoom-label{font-size:0.688rem;font-weight:600;min-width:36px;text-align:center}
+
+/* Canvas */
+.dt-canvas{overflow:auto;padding:32px 24px;min-height:500px;max-height:75vh;background:var(--neutral-50);border:1px solid var(--neutral-200);border-radius:var(--radius-lg);background-image:radial-gradient(circle,var(--neutral-200) 1px,transparent 1px);background-size:20px 20px}
+
+/* Tree Structure */
+.dt-tree{display:inline-block;min-width:100%}
+.dt-branch{display:flex;flex-direction:column;align-items:center}
+.dt-branch.dragging{opacity:0.4}
+
+/* Node */
+.dt-node{position:relative;min-width:260px;max-width:360px;padding:10px 14px;border-radius:10px;border:2px solid;background:var(--neutral-0);transition:all 0.15s ease;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.dt-node:hover{box-shadow:0 4px 16px rgba(0,0,0,0.1);transform:translateY(-1px)}
+.dt-node.drag-over{box-shadow:0 0 0 3px rgba(59,130,246,0.4);transform:scale(1.02)}
+.dt-node.editing{box-shadow:0 0 0 3px rgba(59,130,246,0.3)}
+
+/* Node Header */
+.dt-node-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.dt-type-select{border:none;background:transparent;font-size:0.75rem;font-weight:700;cursor:pointer;padding:2px 0}
+.dt-drag-handle{cursor:grab;font-size:1rem;color:var(--neutral-400);line-height:1;user-select:none;padding:2px 4px}
+.dt-drag-handle:active{cursor:grabbing}
+
+/* Node Content */
+.dt-node-text{font-size:0.813rem;font-weight:500;color:var(--neutral-800);line-height:1.5;min-height:20px;cursor:text;word-break:break-word}
+.dt-placeholder{color:var(--neutral-400);font-style:italic;font-weight:400}
+.dt-node-editor{width:100%;border:1px solid var(--neutral-300);border-radius:var(--radius-sm);padding:6px 8px;font-size:0.813rem;font-family:inherit;resize:vertical;outline:none;line-height:1.5}
+.dt-node-editor:focus{border-color:var(--primary-400)}
+
+/* Node Actions */
+.dt-node-actions{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:6px}
+.dt-add-menu{display:flex;gap:2px}
+.dt-add-btn{width:26px;height:26px;border-radius:50%;border:1px solid var(--neutral-200);background:var(--neutral-0);cursor:pointer;font-size:0.688rem;display:flex;align-items:center;justify-content:center;transition:all var(--transition-fast);opacity:0.6}
+.dt-add-btn:hover{opacity:1;transform:scale(1.15);box-shadow:0 2px 6px rgba(0,0,0,0.1)}
+.dt-node-btns{display:flex;gap:3px}
+.dt-action-btn{background:none;border:none;font-size:0.688rem;cursor:pointer;padding:3px 5px;border-radius:3px;color:var(--neutral-500);opacity:0.7;transition:all var(--transition-fast)}
+.dt-action-btn:hover{opacity:1;background:var(--neutral-100)}
+.dt-action-btn.remove:hover{color:#EF4444;background:#FEF2F2}
+
+/* Children container with connectors */
+.dt-children{display:flex;gap:16px;padding-top:24px;position:relative;margin-top:0}
+
+/* Vertical connector from parent to horizontal bar */
+.dt-children::before{content:'';position:absolute;top:0;left:50%;width:2px;height:12px;background:var(--neutral-300)}
+
+/* Horizontal bar spanning all children */
+.dt-children::after{content:'';position:absolute;top:12px;height:2px;background:var(--neutral-300);left:calc(50% / var(--child-count, 1));right:calc(50% / var(--child-count, 1))}
+
+/* Individual child connector */
+.dt-children>.dt-branch{position:relative}
+.dt-children>.dt-branch::before{content:'';position:absolute;top:-12px;left:50%;width:2px;height:12px;background:var(--neutral-300)}
+
+/* Tip */
+.dt-tip{padding:10px 16px;background:var(--neutral-50);border:1px solid var(--neutral-200);border-radius:var(--radius-sm);font-size:0.75rem;color:var(--neutral-500);text-align:center}
+
+@media(max-width:768px){
+  .dt-node{min-width:200px;max-width:280px;padding:8px 10px}
+  .dt-toolbar{flex-direction:column}
+  .dt-search{width:100%}
+}

@@ -1,0 +1,1 @@
+export default { id: 'yt-timestamp-generator', name: 'YouTube Timestamp Link', slug: 'yt-timestamp-generator', description: 'Generate timestamped YouTube links that start at a specific time', category: 'social-tools', icon: 'Link', keywords: ['youtube', 'timestamp', 'link', 'time', 'video'] };

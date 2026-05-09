@@ -1,0 +1,1 @@
+export default { id: 'pdf-to-grayscale', name: 'PDF to Grayscale', slug: 'pdf-to-grayscale', description: 'Convert a colored PDF to grayscale for printing or ink savings', category: 'pdf-tools', icon: 'FileText', keywords: ['pdf', 'grayscale', 'black', 'white', 'print'] };

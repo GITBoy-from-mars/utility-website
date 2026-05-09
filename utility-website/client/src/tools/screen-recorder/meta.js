@@ -1,0 +1,1 @@
+export default { id: 'screen-recorder', name: 'Screen Recorder', slug: 'screen-recorder', description: 'Record your screen directly in the browser — no software needed', category: 'productivity', icon: 'Check', keywords: ['screen', 'recorder', 'capture', 'video', 'record'] };

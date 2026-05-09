@@ -1,0 +1,1 @@
+export default { id: 'pdf-watermark', name: 'PDF Watermark', slug: 'pdf-watermark', description: 'Add text or image watermarks to your PDF documents', category: 'document-utilities', icon: 'Watermark', keywords: ['pdf', 'watermark', 'stamp', 'text', 'overlay'], batchSupport: true, acceptedFiles: '.pdf', maxFileSize: '50MB' };

@@ -1,0 +1,1 @@
+export default { id: 'kanban-board', name: 'Kanban Board', slug: 'kanban-board', description: 'Simple drag-and-drop Kanban board for task management — saves locally', category: 'productivity', icon: 'Check', keywords: ['kanban', 'board', 'task', 'project', 'management', 'drag'] };

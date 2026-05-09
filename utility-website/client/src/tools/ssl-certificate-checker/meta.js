@@ -1,0 +1,1 @@
+export default { id: 'ssl-certificate-checker', name: 'SSL Certificate Checker', slug: 'ssl-certificate-checker', description: 'Check SSL certificate details and expiry for any domain', category: 'seo-tools', icon: 'Globe', keywords: ['ssl', 'certificate', 'check', 'https', 'security', 'expiry'] };

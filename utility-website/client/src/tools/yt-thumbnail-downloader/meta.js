@@ -1,0 +1,1 @@
+export default { id: 'yt-thumbnail-downloader', name: 'YouTube Thumbnail Downloader', slug: 'yt-thumbnail-downloader', description: 'Download YouTube video thumbnails in all available resolutions', category: 'social-tools', icon: 'Download', keywords: ['youtube', 'thumbnail', 'download', 'image', 'video'] };

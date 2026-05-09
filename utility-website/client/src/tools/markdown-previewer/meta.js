@@ -1,0 +1,1 @@
+export default { id: 'markdown-previewer', name: 'Markdown Previewer', slug: 'markdown-previewer', description: 'Write and preview Markdown with live rendering in real time', category: 'developer-tools', icon: 'MarkdownPreview', keywords: ['markdown', 'preview', 'render', 'md', 'editor'], batchSupport: false, acceptedFiles: null, maxFileSize: null };

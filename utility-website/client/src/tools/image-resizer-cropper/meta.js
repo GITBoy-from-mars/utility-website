@@ -1,0 +1,1 @@
+export default { id: 'image-resizer-cropper', name: 'Image Resizer & Cropper', slug: 'image-resizer-cropper', description: 'Resize and crop images to exact dimensions for any platform', category: 'image-tools', icon: 'Crop', keywords: ['image', 'resize', 'crop', 'dimensions', 'scale'], batchSupport: true, acceptedFiles: 'image/*', maxFileSize: '50MB' };

@@ -1,0 +1,1 @@
+export default { id: 'goal-tracker', name: 'Goal Tracker', slug: 'goal-tracker', description: 'Set goals with milestones and track your progress visually', category: 'productivity', icon: 'Check', keywords: ['goal', 'tracker', 'progress', 'milestone', 'target'] };

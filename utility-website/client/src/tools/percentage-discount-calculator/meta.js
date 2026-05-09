@@ -1,0 +1,1 @@
+export default { id: 'percentage-discount-calculator', name: 'Percentage & Discount', slug: 'percentage-discount-calculator', description: 'Calculate percentages, discounts, markups, and price differences', category: 'calculators', icon: 'Percent', keywords: ['percentage', 'discount', 'markup', 'calculate', 'off'], batchSupport: false, acceptedFiles: null, maxFileSize: null };

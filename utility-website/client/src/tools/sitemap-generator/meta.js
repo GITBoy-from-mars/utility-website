@@ -1,0 +1,1 @@
+export default { id: 'sitemap-generator', name: 'Sitemap Generator', slug: 'sitemap-generator', description: 'Generate XML sitemaps for your website with customizable priority and frequency', category: 'seo-tools', icon: 'Globe', keywords: ['sitemap', 'xml', 'seo', 'google', 'search'] };

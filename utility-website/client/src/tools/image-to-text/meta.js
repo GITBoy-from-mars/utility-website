@@ -1,0 +1,1 @@
+export default { id: 'image-to-text', name: 'Image to Text (OCR)', slug: 'image-to-text', description: 'Extract text from any image using advanced OCR technology', category: 'image-tools', icon: 'Ocr', keywords: ['image', 'text', 'ocr', 'extract', 'scan', 'read'], batchSupport: false, acceptedFiles: 'image/*', maxFileSize: '20MB' };

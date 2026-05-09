@@ -1,0 +1,1 @@
+export default { id: 'case-converter', name: 'Case Converter', slug: 'case-converter', description: 'Convert text between UPPERCASE, lowercase, Title Case, Sentence case, and more', category: 'text-utilities', icon: 'FileText', keywords: ['case', 'convert', 'upper', 'lower', 'title', 'sentence'] };

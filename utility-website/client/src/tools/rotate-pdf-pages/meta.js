@@ -1,0 +1,1 @@
+export default { id: 'rotate-pdf-pages', name: 'Rotate PDF Pages', slug: 'rotate-pdf-pages', description: 'Rotate specific pages in a PDF by 90°, 180°, or 270°', category: 'pdf-tools', icon: 'ArrowsExchange', keywords: ['rotate', 'pdf', 'page', 'turn', 'orientation'] };

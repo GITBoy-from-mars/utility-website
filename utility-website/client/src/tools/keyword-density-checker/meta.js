@@ -1,0 +1,1 @@
+export default { id: 'keyword-density-checker', name: 'Keyword Density Checker', slug: 'keyword-density-checker', description: 'Analyze keyword density and word frequency in any text content', category: 'seo-tools', icon: 'Search', keywords: ['keyword', 'density', 'seo', 'frequency', 'word count'] };

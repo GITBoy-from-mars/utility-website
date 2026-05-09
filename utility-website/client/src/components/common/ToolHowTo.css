@@ -1,0 +1,8 @@
+.tool-howto{margin-top:40px;padding-top:32px;border-top:1px solid var(--neutral-200)}
+.tool-howto-title{font-size:1.25rem;font-weight:700;margin-bottom:20px;color:var(--neutral-800)}
+.tool-howto-steps{display:flex;flex-direction:column;gap:16px}
+.tool-howto-step{display:flex;gap:16px;align-items:flex-start}
+.tool-howto-num{width:36px;height:36px;min-width:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary-500),var(--primary-600));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.875rem}
+.tool-howto-content{flex:1}
+.tool-howto-step-title{font-size:0.938rem;font-weight:700;color:var(--neutral-800);margin-bottom:2px}
+.tool-howto-step-desc{font-size:0.838rem;color:var(--neutral-500);line-height:1.6}

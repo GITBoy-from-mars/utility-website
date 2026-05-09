@@ -1,0 +1,1 @@
+export default { id: 'remove-duplicate-lines', name: 'Remove Duplicate Lines', slug: 'remove-duplicate-lines', description: 'Remove duplicate lines from text while preserving order', category: 'text-utilities', icon: 'FileText', keywords: ['remove', 'duplicate', 'lines', 'unique', 'deduplicate'] };

@@ -1,0 +1,1 @@
+export default { id: 'protect-pdf', name: 'Protect PDF', slug: 'protect-pdf', description: 'Add password protection and encryption to your PDF files', category: 'pdf-tools', icon: 'FileText', keywords: ['protect', 'pdf', 'password', 'encrypt', 'lock', 'security'] };

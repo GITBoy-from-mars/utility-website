@@ -1,0 +1,1 @@
+export default { id: 'screenshot-to-pdf', name: 'Screenshot to PDF', slug: 'screenshot-to-pdf', description: 'Convert screenshots and images into professional PDF documents', category: 'image-tools', icon: 'Screenshot', keywords: ['screenshot', 'pdf', 'image', 'convert', 'capture'], batchSupport: true, acceptedFiles: 'image/*', maxFileSize: '50MB' };

@@ -1,0 +1,1 @@
+export default { id: 'age-calculator', name: 'Age Calculator', slug: 'age-calculator', description: 'Calculate your exact age in years, months, days, hours, and minutes', category: 'calculators', icon: 'Age', keywords: ['age', 'birthday', 'date', 'calculate', 'years'], batchSupport: false, acceptedFiles: null, maxFileSize: null };

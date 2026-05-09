@@ -1,0 +1,1 @@
+export default { id: 'unit-converter', name: 'Unit Converter', slug: 'unit-converter', description: 'Convert between units of length, weight, temperature, and live currency rates', category: 'calculators', icon: 'Ruler', keywords: ['unit', 'convert', 'length', 'weight', 'currency', 'temperature'], batchSupport: false, acceptedFiles: null, maxFileSize: null };

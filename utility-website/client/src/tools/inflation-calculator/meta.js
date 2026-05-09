@@ -1,0 +1,1 @@
+export default { id: 'inflation-calculator', name: 'Inflation Calculator', slug: 'inflation-calculator', description: 'Calculate how inflation affects the value of money over time', category: 'financial-tools', icon: 'Emi', keywords: ['inflation', 'calculator', 'money', 'value', 'purchasing', 'power'] };

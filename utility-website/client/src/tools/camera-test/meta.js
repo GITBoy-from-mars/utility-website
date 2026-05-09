@@ -1,0 +1,1 @@
+export default { id: 'camera-test', name: 'Camera Test', slug: 'camera-test', description: 'Test your webcam with live preview and camera info', category: 'generators', icon: 'Zap', keywords: ['camera', 'test', 'webcam', 'video', 'check'] };

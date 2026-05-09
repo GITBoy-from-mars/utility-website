@@ -1,0 +1,1 @@
+export default { id: 'remove-pdf-metadata', name: 'Remove PDF Metadata', slug: 'remove-pdf-metadata', description: 'Strip all metadata from PDF files for privacy and security', category: 'pdf-tools', icon: 'Shield', keywords: ['remove', 'metadata', 'pdf', 'privacy', 'clean'] };

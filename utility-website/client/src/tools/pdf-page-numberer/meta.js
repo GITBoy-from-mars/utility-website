@@ -1,0 +1,1 @@
+export default { id: 'pdf-page-numberer', name: 'PDF Page Numberer', slug: 'pdf-page-numberer', description: 'Add page numbers to any PDF document with custom positioning', category: 'pdf-tools', icon: 'FileText', keywords: ['pdf', 'page', 'number', 'footer', 'header'] };

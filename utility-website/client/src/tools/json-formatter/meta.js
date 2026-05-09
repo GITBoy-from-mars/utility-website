@@ -1,0 +1,1 @@
+export default { id: 'json-formatter', name: 'JSON Formatter & Validator', slug: 'json-formatter', description: 'Format, beautify, minify, and validate JSON with syntax highlighting', category: 'developer-tools', icon: 'Code', keywords: ['json', 'format', 'beautify', 'minify', 'validate'] };

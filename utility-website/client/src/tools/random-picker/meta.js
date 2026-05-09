@@ -1,0 +1,1 @@
+export default { id: 'random-picker', name: 'Random Picker from List', slug: 'random-picker', description: 'Randomly pick one or more items from a custom list', category: 'generators', icon: 'Zap', keywords: ['random', 'pick', 'list', 'choose', 'select'] };

@@ -1,0 +1,1 @@
+export default { id: 'base64-encoder-decoder', name: 'Base64 Encoder/Decoder', slug: 'base64-encoder-decoder', description: 'Encode text to Base64 or decode Base64 strings instantly', category: 'developer-tools', icon: 'Base64', keywords: ['base64', 'encode', 'decode', 'string', 'developer'], batchSupport: false, acceptedFiles: null, maxFileSize: null };

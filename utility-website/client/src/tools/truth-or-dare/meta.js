@@ -1,0 +1,1 @@
+export default { id: 'truth-or-dare', name: 'Truth or Dare Generator', slug: 'truth-or-dare', description: 'Generate random truth questions and dare challenges for parties', category: 'generators', icon: 'Zap', keywords: ['truth', 'dare', 'game', 'party', 'random'] };

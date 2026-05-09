@@ -1,0 +1,1 @@
+export default { id: 'decision-tree', name: 'Decision Tree Builder', slug: 'decision-tree', description: 'Build interactive decision trees and flowcharts with live preview', category: 'productivity', icon: 'Code', keywords: ['decision', 'tree', 'flowchart', 'builder', 'logic'] };

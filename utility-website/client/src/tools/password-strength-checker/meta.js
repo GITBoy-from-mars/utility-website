@@ -1,0 +1,1 @@
+export default { id: 'password-strength-checker', name: 'Password Strength Checker', slug: 'password-strength-checker', description: 'Check how strong your password is with detailed security analysis', category: 'generators', icon: 'Shield', keywords: ['password', 'strength', 'check', 'security', 'analyze'] };

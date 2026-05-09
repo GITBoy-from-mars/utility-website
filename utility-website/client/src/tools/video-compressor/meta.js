@@ -1,0 +1,1 @@
+export default { id: 'video-compressor', name: 'Video Compressor', slug: 'video-compressor', description: 'Compress video files to reduce size with adjustable quality settings', category: 'compression', icon: 'Video', keywords: ['video', 'compress', 'mp4', 'reduce', 'size'], batchSupport: false, acceptedFiles: 'video/*', maxFileSize: '200MB' };

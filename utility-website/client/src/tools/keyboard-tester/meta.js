@@ -1,0 +1,1 @@
+export default { id: 'keyboard-tester', name: 'Keyboard Tester', slug: 'keyboard-tester', description: 'Test every key on your keyboard with visual feedback', category: 'generators', icon: 'Zap', keywords: ['keyboard', 'test', 'key', 'press', 'check'] };

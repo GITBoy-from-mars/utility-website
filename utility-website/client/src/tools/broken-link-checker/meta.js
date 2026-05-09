@@ -1,0 +1,1 @@
+export default { id: 'broken-link-checker', name: 'Broken Link Checker', slug: 'broken-link-checker', description: 'Check any URL for broken links and HTTP status codes', category: 'seo-tools', icon: 'Link', keywords: ['broken', 'link', 'checker', 'dead', 'seo', '404'] };

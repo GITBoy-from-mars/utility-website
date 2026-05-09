@@ -1,0 +1,1 @@
+export default { id: 'color-picker', name: 'Color Picker & Converter', slug: 'color-picker', description: 'Pick colors and convert between HEX, RGB, and HSL formats', category: 'developer-tools', icon: 'Image', keywords: ['color', 'picker', 'hex', 'rgb', 'hsl', 'converter'] };

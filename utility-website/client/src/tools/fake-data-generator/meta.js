@@ -1,0 +1,1 @@
+export default { id: 'fake-data-generator', name: 'Fake Data Generator', slug: 'fake-data-generator', description: 'Generate realistic fake data — names, emails, addresses, phones and more', category: 'generators', icon: 'FileText', keywords: ['fake', 'data', 'generate', 'mock', 'name', 'email', 'address'] };

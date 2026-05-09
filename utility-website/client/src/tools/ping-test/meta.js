@@ -1,0 +1,1 @@
+export default { id: 'ping-test', name: 'Ping Test Tool', slug: 'ping-test', description: 'Test connectivity to any server by pinging a domain or IP', category: 'seo-tools', icon: 'Zap', keywords: ['ping', 'test', 'server', 'latency', 'connectivity'] };

@@ -1,0 +1,1 @@
+export default { id: 'binary-converter', name: 'Binary ↔ Decimal Converter', slug: 'binary-converter', description: 'Convert between binary, decimal, octal, and hexadecimal number systems', category: 'developer-tools', icon: 'Code', keywords: ['binary', 'decimal', 'hex', 'octal', 'converter', 'number'] };

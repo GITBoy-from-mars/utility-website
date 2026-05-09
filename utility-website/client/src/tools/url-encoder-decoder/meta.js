@@ -1,0 +1,1 @@
+export default { id: 'url-encoder-decoder', name: 'URL Encoder/Decoder', slug: 'url-encoder-decoder', description: 'Encode or decode URLs and query parameters instantly', category: 'developer-tools', icon: 'Link', keywords: ['url', 'encode', 'decode', 'uri', 'percent', 'developer'], batchSupport: false, acceptedFiles: null, maxFileSize: null };

@@ -1,0 +1,1 @@
+export default { id: 'habit-tracker', name: 'Habit Tracker', slug: 'habit-tracker', description: 'Track daily habits with streaks and progress visualization using local storage', category: 'productivity', icon: 'Check', keywords: ['habit', 'tracker', 'daily', 'streak', 'routine'] };

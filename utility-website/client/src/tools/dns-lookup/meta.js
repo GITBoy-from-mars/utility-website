@@ -1,0 +1,1 @@
+export default { id: 'dns-lookup', name: 'DNS Lookup Tool', slug: 'dns-lookup', description: 'Look up DNS records for any domain — A, AAAA, MX, CNAME, TXT, NS', category: 'seo-tools', icon: 'Globe', keywords: ['dns', 'lookup', 'domain', 'record', 'mx', 'cname'] };

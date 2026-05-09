@@ -1,0 +1,1 @@
+export default { id: 'dice-roller', name: 'Dice Roller', slug: 'dice-roller', description: 'Roll virtual dice with realistic 3D animation and multiple dice support', category: 'generators', icon: 'Zap', keywords: ['dice', 'roll', 'random', 'game', 'd6', 'd20'] };

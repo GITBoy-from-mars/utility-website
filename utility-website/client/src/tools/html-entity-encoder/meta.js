@@ -1,0 +1,1 @@
+export default { id: 'html-entity-encoder', name: 'HTML Entity Encoder/Decoder', slug: 'html-entity-encoder', description: 'Encode and decode HTML entities for safe web content', category: 'developer-tools', icon: 'Code', keywords: ['html', 'entity', 'encode', 'decode', 'escape'] };

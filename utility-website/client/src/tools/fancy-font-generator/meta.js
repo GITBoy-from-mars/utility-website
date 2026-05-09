@@ -1,0 +1,1 @@
+export default { id: 'fancy-font-generator', name: 'Fancy Font Generator', slug: 'fancy-font-generator', description: 'Convert text into stylish Unicode fonts — bold, italic, cursive, bubble, and more', category: 'generators', icon: 'Zap', keywords: ['fancy', 'font', 'text', 'unicode', 'stylish', 'copy'] };

@@ -1,0 +1,1 @@
+export default { id: 'study-timer', name: 'Study Timer (Pomodoro)', slug: 'study-timer', description: 'Focus timer with Pomodoro technique — 25 min work, 5 min break cycles', category: 'productivity', icon: 'Check', keywords: ['pomodoro', 'study', 'timer', 'focus', 'productivity'] };

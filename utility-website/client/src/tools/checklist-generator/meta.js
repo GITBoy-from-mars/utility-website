@@ -1,0 +1,1 @@
+export default { id: 'checklist-generator', name: 'Checklist Generator', slug: 'checklist-generator', description: 'Create downloadable checklists for projects, trips, and tasks', category: 'productivity', icon: 'Check', keywords: ['checklist', 'todo', 'list', 'download', 'task'] };

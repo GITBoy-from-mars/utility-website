@@ -1,0 +1,1 @@
+export default { id: 'pdf-to-word', name: 'PDF to Word', slug: 'pdf-to-word', description: 'Convert PDF documents to editable Word (.docx) files with formatting preserved', category: 'converters', icon: 'FileText', keywords: ['pdf', 'word', 'docx', 'convert', 'document'], batchSupport: true, acceptedFiles: '.pdf', maxFileSize: '50MB' };

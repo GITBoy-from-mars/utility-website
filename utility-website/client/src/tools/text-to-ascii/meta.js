@@ -1,0 +1,1 @@
+export default { id: 'text-to-ascii', name: 'Text to ASCII Converter', slug: 'text-to-ascii', description: 'Convert text to ASCII codes and ASCII codes back to text', category: 'developer-tools', icon: 'Code', keywords: ['ascii', 'text', 'convert', 'binary', 'code'] };

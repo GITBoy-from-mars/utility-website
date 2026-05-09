@@ -1,0 +1,1 @@
+export default { id: 'pdf-compressor', name: 'PDF Compressor', slug: 'pdf-compressor', description: 'Compress PDF files to reduce size while maintaining quality', category: 'compression', icon: 'CompressPdf', keywords: ['pdf', 'compress', 'reduce', 'size', 'shrink'], batchSupport: true, acceptedFiles: '.pdf', maxFileSize: '50MB' };

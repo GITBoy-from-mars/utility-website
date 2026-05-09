@@ -1,0 +1,1 @@
+export default { id: 'date-difference', name: 'Date Difference Calculator', slug: 'date-difference', description: 'Calculate the exact difference between two dates in multiple units', category: 'calculators', icon: 'Age', keywords: ['date', 'difference', 'days', 'between', 'duration'] };

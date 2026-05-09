@@ -1,0 +1,1 @@
+export default { id: 'text-diff-checker', name: 'Text Diff Checker', slug: 'text-diff-checker', description: 'Compare two texts side by side and highlight differences', category: 'developer-tools', icon: 'Code', keywords: ['diff', 'compare', 'text', 'difference', 'merge'] };

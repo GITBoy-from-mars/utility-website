@@ -1,0 +1,1 @@
+export default { id: 'uuid-generator', name: 'UUID Generator', slug: 'uuid-generator', description: 'Generate unique UUIDs (v4) instantly for development and testing', category: 'generators', icon: 'Code', keywords: ['uuid', 'guid', 'unique', 'identifier', 'generate'] };

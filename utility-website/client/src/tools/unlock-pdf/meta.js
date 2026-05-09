@@ -1,0 +1,1 @@
+export default { id: 'unlock-pdf', name: 'Unlock PDF', slug: 'unlock-pdf', description: 'Remove password protection from PDF files', category: 'pdf-tools', icon: 'Shield', keywords: ['unlock', 'pdf', 'password', 'remove', 'decrypt'] };

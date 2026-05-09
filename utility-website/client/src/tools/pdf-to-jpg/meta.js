@@ -1,0 +1,1 @@
+export default { id: 'pdf-to-jpg', name: 'PDF to JPG/PNG', slug: 'pdf-to-jpg', description: 'Convert PDF pages to high-quality JPG or PNG images', category: 'converters', icon: 'ArrowsExchange', keywords: ['pdf', 'jpg', 'png', 'image', 'convert', 'extract'] };

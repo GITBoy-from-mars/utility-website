@@ -1,0 +1,1 @@
+export default { id: 'gst-calculator', name: 'GST Calculator', slug: 'gst-calculator', description: 'Calculate GST amounts and find inclusive/exclusive prices instantly', category: 'calculators', icon: 'Gst', keywords: ['gst', 'tax', 'calculator', 'inclusive', 'exclusive'], batchSupport: false, acceptedFiles: null, maxFileSize: null };

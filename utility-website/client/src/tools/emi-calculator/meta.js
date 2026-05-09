@@ -1,0 +1,1 @@
+export default { id: 'emi-calculator', name: 'EMI Calculator', slug: 'emi-calculator', description: 'Calculate monthly EMI for loans with detailed amortization breakdown', category: 'calculators', icon: 'Emi', keywords: ['emi', 'loan', 'interest', 'monthly', 'calculator', 'finance'], batchSupport: false, acceptedFiles: null, maxFileSize: null };

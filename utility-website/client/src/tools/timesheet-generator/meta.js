@@ -1,0 +1,1 @@
+export default { id: 'timesheet-generator', name: 'Timesheet Generator', slug: 'timesheet-generator', description: 'Create weekly or monthly timesheets and download as CSV', category: 'productivity', icon: 'Age', keywords: ['timesheet', 'hours', 'work', 'log', 'time'] };

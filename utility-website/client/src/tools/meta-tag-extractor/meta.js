@@ -1,0 +1,1 @@
+export default { id: 'meta-tag-extractor', name: 'Meta Tag Extractor', slug: 'meta-tag-extractor', description: 'Extract all meta tags, Open Graph, and Twitter card data from any URL', category: 'seo-tools', icon: 'Search', keywords: ['meta', 'tag', 'extractor', 'seo', 'og', 'twitter'] };

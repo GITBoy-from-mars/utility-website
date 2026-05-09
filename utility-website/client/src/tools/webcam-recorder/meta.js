@@ -1,0 +1,1 @@
+export default { id: 'webcam-recorder', name: 'Webcam Recorder', slug: 'webcam-recorder', description: 'Record video from your webcam directly in the browser', category: 'productivity', icon: 'Check', keywords: ['webcam', 'camera', 'record', 'video'] };

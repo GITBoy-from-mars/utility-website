@@ -1,0 +1,1 @@
+export default { id: 'binary-text-converter', name: 'Binary ↔ Text Converter', slug: 'binary-text-converter', description: 'Convert text to binary representation and binary back to text', category: 'developer-tools', icon: 'Code', keywords: ['binary', 'text', 'convert', 'encode', 'decode'] };

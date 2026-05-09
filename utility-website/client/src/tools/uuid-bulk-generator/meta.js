@@ -1,0 +1,1 @@
+export default { id: 'uuid-bulk-generator', name: 'UUID Bulk Generator', slug: 'uuid-bulk-generator', description: 'Generate hundreds of UUIDs at once with format options', category: 'generators', icon: 'Code', keywords: ['uuid', 'bulk', 'generate', 'mass', 'guid'] };

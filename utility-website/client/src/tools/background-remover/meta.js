@@ -1,0 +1,1 @@
+export default { id: 'background-remover', name: 'Background Remover', slug: 'background-remover', description: 'Remove backgrounds from images automatically with AI-powered detection', category: 'image-tools', icon: 'BgRemove', keywords: ['background', 'remove', 'transparent', 'cutout', 'image'], batchSupport: true, acceptedFiles: 'image/*', maxFileSize: '20MB' };

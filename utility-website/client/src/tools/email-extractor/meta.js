@@ -1,0 +1,1 @@
+export default { id: 'email-extractor', name: 'Email Extractor', slug: 'email-extractor', description: 'Extract all email addresses from any text content instantly', category: 'text-utilities', icon: 'Mail', keywords: ['email', 'extract', 'find', 'text', 'address'] };

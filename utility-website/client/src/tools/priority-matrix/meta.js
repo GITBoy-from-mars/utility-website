@@ -1,0 +1,1 @@
+export default { id: 'priority-matrix', name: 'Priority Matrix', slug: 'priority-matrix', description: 'Organize tasks using the Eisenhower Urgent vs Important matrix', category: 'productivity', icon: 'Check', keywords: ['priority', 'matrix', 'eisenhower', 'urgent', 'important', 'tasks'] };

@@ -1,0 +1,1 @@
+export default { id: 'mic-test', name: 'Mic Test', slug: 'mic-test', description: 'Test your microphone with real-time audio level visualization', category: 'generators', icon: 'Zap', keywords: ['mic', 'microphone', 'test', 'audio', 'level'] };

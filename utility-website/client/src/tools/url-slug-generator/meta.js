@@ -1,0 +1,1 @@
+export default { id: 'url-slug-generator', name: 'URL Slug Generator', slug: 'url-slug-generator', description: 'Convert text to URL-friendly slugs for websites and blogs', category: 'developer-tools', icon: 'Link', keywords: ['slug', 'url', 'seo', 'permalink', 'friendly'] };

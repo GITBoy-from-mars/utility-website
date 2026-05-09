@@ -1,0 +1,1 @@
+export default { id: 'yes-no-decision', name: 'Yes/No Decision Tool', slug: 'yes-no-decision', description: 'Let the universe decide with a random yes or no answer', category: 'generators', icon: 'Zap', keywords: ['yes', 'no', 'decision', 'random', 'choose'] };

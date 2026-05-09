@@ -1,0 +1,1 @@
+export default { id: 'countdown-timer', name: 'Countdown Timer', slug: 'countdown-timer', description: 'Create shareable countdown timers for events and deadlines', category: 'generators', icon: 'Age', keywords: ['countdown', 'timer', 'event', 'deadline', 'share'] };

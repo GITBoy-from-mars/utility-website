@@ -1,0 +1,1 @@
+export default { id: 'timezone-converter', name: 'Time Zone Converter', slug: 'timezone-converter', description: 'Convert time between different time zones around the world', category: 'calculators', icon: 'Globe', keywords: ['timezone', 'time', 'convert', 'world', 'clock'] };

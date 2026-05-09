@@ -1,0 +1,1 @@
+export default { id: 'random-password-list', name: 'Random Password List', slug: 'random-password-list', description: 'Generate a list of random secure passwords in bulk', category: 'generators', icon: 'Shield', keywords: ['password', 'list', 'bulk', 'generate', 'random'] };

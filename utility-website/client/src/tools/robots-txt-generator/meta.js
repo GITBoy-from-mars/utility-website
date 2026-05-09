@@ -1,0 +1,1 @@
+export default { id: 'robots-txt-generator', name: 'Robots.txt Generator', slug: 'robots-txt-generator', description: 'Generate robots.txt files to control search engine crawling', category: 'seo-tools', icon: 'Code', keywords: ['robots', 'txt', 'seo', 'crawl', 'search engine'] };

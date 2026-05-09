@@ -1,0 +1,1 @@
+export default { id: 'loan-amortization', name: 'Loan Amortization', slug: 'loan-amortization', description: 'View detailed month-by-month loan amortization schedule', category: 'financial-tools', icon: 'Emi', keywords: ['loan', 'amortization', 'schedule', 'monthly', 'interest'] };

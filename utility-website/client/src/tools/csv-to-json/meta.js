@@ -1,0 +1,1 @@
+export default { id: 'csv-to-json', name: 'CSV to JSON Converter', slug: 'csv-to-json', description: 'Convert CSV data to JSON format with auto-detection of headers', category: 'developer-tools', icon: 'Code', keywords: ['csv', 'json', 'convert', 'table', 'data'] };

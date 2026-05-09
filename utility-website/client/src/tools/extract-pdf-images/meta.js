@@ -1,0 +1,1 @@
+export default { id: 'extract-pdf-images', name: 'Extract Images from PDF', slug: 'extract-pdf-images', description: 'Extract all images from a PDF file as individual image files', category: 'pdf-tools', icon: 'Image', keywords: ['extract', 'images', 'pdf', 'photo', 'picture'] };

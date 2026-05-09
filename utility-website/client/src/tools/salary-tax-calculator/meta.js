@@ -1,0 +1,1 @@
+export default { id: 'salary-tax-calculator', name: 'Salary Tax Calculator', slug: 'salary-tax-calculator', description: 'Calculate income tax based on salary with old and new tax regime comparison', category: 'financial-tools', icon: 'Calculator', keywords: ['salary', 'tax', 'income', 'regime', 'calculate'] };

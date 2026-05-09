@@ -1,0 +1,1 @@
+export default { id: 'fuel-cost-calculator', name: 'Fuel Cost Calculator', slug: 'fuel-cost-calculator', description: 'Calculate fuel costs for trips based on distance, mileage and fuel price', category: 'financial-tools', icon: 'Zap', keywords: ['fuel', 'petrol', 'diesel', 'cost', 'trip', 'mileage'] };

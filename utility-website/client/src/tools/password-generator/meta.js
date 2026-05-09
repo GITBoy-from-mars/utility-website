@@ -1,0 +1,1 @@
+export default { id: 'password-generator', name: 'Password Generator', slug: 'password-generator', description: 'Generate strong, secure passwords with customizable length and character types', category: 'generators', icon: 'Shield', keywords: ['password', 'generate', 'secure', 'random', 'strong'] };

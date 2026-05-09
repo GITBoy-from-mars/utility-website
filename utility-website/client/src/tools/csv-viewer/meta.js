@@ -1,0 +1,1 @@
+export default { id: 'csv-viewer', name: 'CSV Viewer', slug: 'csv-viewer', description: 'View and explore CSV files in a sortable, searchable table', category: 'developer-tools', icon: 'Code', keywords: ['csv', 'viewer', 'table', 'data', 'spreadsheet'] };

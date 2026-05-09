@@ -1,0 +1,1 @@
+export default { id: 'pdf-metadata-editor', name: 'PDF Metadata Editor', slug: 'pdf-metadata-editor', description: 'View and edit PDF metadata — title, author, subject, keywords', category: 'pdf-tools', icon: 'Document', keywords: ['pdf', 'metadata', 'edit', 'title', 'author'] };

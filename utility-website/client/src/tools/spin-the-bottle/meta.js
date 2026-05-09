@@ -1,0 +1,1 @@
+export default { id: 'spin-the-bottle', name: 'Spin the Bottle', slug: 'spin-the-bottle', description: 'Virtual spin the bottle game — add player names and spin!', category: 'generators', icon: 'Zap', keywords: ['spin', 'bottle', 'game', 'party', 'random'] };

@@ -1,0 +1,1 @@
+.imgconv-options{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px;background:var(--neutral-50);border-radius:var(--radius-md);border:1px solid var(--neutral-200)}.imgconv-range{width:100%;accent-color:var(--primary-600);margin-top:4px}@media(max-width:768px){.imgconv-options{grid-template-columns:1fr}}

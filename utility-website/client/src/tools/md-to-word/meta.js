@@ -1,0 +1,1 @@
+export default { id: 'md-to-word', name: 'Markdown to Word', slug: 'md-to-word', description: 'Convert Markdown (.md) files to Microsoft Word (.docx) documents', category: 'converters', icon: 'Markdown', keywords: ['markdown', 'md', 'word', 'docx', 'convert'], batchSupport: true, acceptedFiles: '.md,.markdown,.txt', maxFileSize: '10MB' };

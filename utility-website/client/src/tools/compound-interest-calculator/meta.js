@@ -1,0 +1,1 @@
+export default { id: 'compound-interest-calculator', name: 'Compound Interest Calculator', slug: 'compound-interest-calculator', description: 'Calculate compound interest with detailed year-by-year growth breakdown', category: 'financial-tools', icon: 'Emi', keywords: ['compound', 'interest', 'calculator', 'investment', 'growth'] };

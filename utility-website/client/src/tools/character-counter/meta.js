@@ -1,0 +1,1 @@
+export default { id: 'character-counter', name: 'Character Counter', slug: 'character-counter', description: 'Count characters with detailed breakdown — letters, digits, spaces, special characters', category: 'text-utilities', icon: 'FileText', keywords: ['character', 'counter', 'letter', 'digit', 'special'] };

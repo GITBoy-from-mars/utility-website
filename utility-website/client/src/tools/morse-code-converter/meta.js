@@ -1,0 +1,1 @@
+export default { id: 'morse-code-converter', name: 'Morse Code Converter', slug: 'morse-code-converter', description: 'Convert text to Morse code and Morse code back to text with audio playback', category: 'generators', icon: 'Zap', keywords: ['morse', 'code', 'convert', 'encode', 'decode', 'audio'] };

@@ -1,0 +1,1 @@
+export default { id: 'image-compressor', name: 'Image Compressor', slug: 'image-compressor', description: 'Compress images to reduce file size while preserving visual quality', category: 'compression', icon: 'CompressImage', keywords: ['image', 'compress', 'reduce', 'size', 'optimize', 'png', 'jpg'], batchSupport: true, acceptedFiles: 'image/*', maxFileSize: '50MB' };

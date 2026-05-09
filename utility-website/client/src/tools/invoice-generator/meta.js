@@ -1,0 +1,1 @@
+export default { id: 'invoice-generator', name: 'Invoice / Quotation Generator', slug: 'invoice-generator', description: 'Create professional invoices and quotations with multiple templates — fully editable', category: 'productivity', icon: 'FileText', keywords: ['invoice', 'quotation', 'bill', 'tax', 'proforma', 'template', 'pdf'] };

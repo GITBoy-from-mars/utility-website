@@ -1,0 +1,1 @@
+export default { id: 'xml-formatter', name: 'XML Formatter', slug: 'xml-formatter', description: 'Format, beautify, and validate XML documents', category: 'developer-tools', icon: 'Code', keywords: ['xml', 'format', 'beautify', 'validate'] };

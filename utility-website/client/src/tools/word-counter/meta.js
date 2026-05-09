@@ -1,0 +1,1 @@
+export default { id: 'word-counter', name: 'Word Counter', slug: 'word-counter', description: 'Count words, characters, sentences, paragraphs and estimate reading time', category: 'text-utilities', icon: 'FileText', keywords: ['word', 'counter', 'character', 'count', 'reading', 'time'] };

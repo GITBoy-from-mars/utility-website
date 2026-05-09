@@ -1,0 +1,1 @@
+export default { id: 'ocr-tool', name: 'OCR — Extract Text', slug: 'ocr-tool', description: 'Extract text from images and PDF documents using optical character recognition', category: 'document-utilities', icon: 'Ocr', keywords: ['ocr', 'text', 'extract', 'image', 'pdf', 'scan'], batchSupport: true, acceptedFiles: '.pdf,.png,.jpg,.jpeg,.bmp,.tiff,.webp', maxFileSize: '20MB' };

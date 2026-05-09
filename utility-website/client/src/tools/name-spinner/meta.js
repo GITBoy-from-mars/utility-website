@@ -1,0 +1,1 @@
+export default { id: 'name-spinner', name: 'Name Spinner Wheel', slug: 'name-spinner', description: 'Spin a colorful wheel to randomly select a name from your list', category: 'generators', icon: 'Zap', keywords: ['spinner', 'wheel', 'name', 'random', 'pick'] };

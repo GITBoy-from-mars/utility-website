@@ -1,0 +1,1 @@
+.esign-section{display:flex;flex-direction:column;gap:12px;align-items:center}.esign-label{font-size:0.938rem;font-weight:600;color:var(--neutral-700);align-self:flex-start}.esign-canvas{border:2px solid var(--neutral-200);border-radius:var(--radius-md);cursor:crosshair;background:#fff;max-width:100%;touch-action:none}.esign-canvas:hover{border-color:var(--primary-300)}

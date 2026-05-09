@@ -1,0 +1,1 @@
+export default { id: 'wheel-of-fortune', name: 'Wheel of Fortune', slug: 'wheel-of-fortune', description: 'Create a custom spinning wheel with your own options for random decisions', category: 'generators', icon: 'Zap', keywords: ['wheel', 'fortune', 'spin', 'random', 'decision', 'picker'] };

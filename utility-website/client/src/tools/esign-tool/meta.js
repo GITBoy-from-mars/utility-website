@@ -1,0 +1,1 @@
+export default { id: 'esign-tool', name: 'eSign PDF', slug: 'esign-tool', description: 'Draw your signature and apply it to any PDF document digitally', category: 'document-utilities', icon: 'Signature', keywords: ['esign', 'sign', 'signature', 'pdf', 'digital'], batchSupport: false, acceptedFiles: '.pdf', maxFileSize: '50MB' };

@@ -1,0 +1,1 @@
+export default { id: 'audio-recorder', name: 'Audio Recorder', slug: 'audio-recorder', description: 'Record audio from your microphone directly in the browser', category: 'productivity', icon: 'Check', keywords: ['audio', 'recorder', 'microphone', 'voice', 'record'] };

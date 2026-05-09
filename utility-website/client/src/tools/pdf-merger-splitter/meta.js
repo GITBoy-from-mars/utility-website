@@ -1,0 +1,1 @@
+export default { id: 'pdf-merger-splitter', name: 'PDF Merger & Splitter', slug: 'pdf-merger-splitter', description: 'Merge multiple PDFs into one or split a PDF into separate pages', category: 'document-utilities', icon: 'Merge', keywords: ['pdf', 'merge', 'split', 'combine', 'pages'], batchSupport: true, acceptedFiles: '.pdf', maxFileSize: '50MB' };

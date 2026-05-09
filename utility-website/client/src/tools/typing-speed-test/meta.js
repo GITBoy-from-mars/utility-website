@@ -1,0 +1,1 @@
+export default { id: 'typing-speed-test', name: 'Typing Speed Test', slug: 'typing-speed-test', description: 'Test your typing speed and accuracy with real-time WPM tracking', category: 'generators', icon: 'Zap', keywords: ['typing', 'speed', 'test', 'wpm', 'accuracy'] };

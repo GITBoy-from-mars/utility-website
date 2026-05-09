@@ -1,0 +1,1 @@
+export default { id: 'random-number-generator', name: 'Random Number / String Generator', slug: 'random-number-generator', description: 'Generate random numbers or strings with customizable range and format', category: 'generators', icon: 'Zap', keywords: ['random', 'number', 'string', 'generate', 'range'] };

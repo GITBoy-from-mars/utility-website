@@ -1,0 +1,1 @@
+export default { id: 'profit-margin-calculator', name: 'Profit Margin Calculator', slug: 'profit-margin-calculator', description: 'Calculate profit margin, markup, and break-even for your business', category: 'financial-tools', icon: 'Percent', keywords: ['profit', 'margin', 'markup', 'business', 'revenue'] };

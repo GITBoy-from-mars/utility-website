@@ -1,0 +1,1 @@
+export default { id: 'sip-calculator', name: 'SIP Calculator', slug: 'sip-calculator', description: 'Calculate SIP returns with compound interest and wealth growth projection', category: 'financial-tools', icon: 'Emi', keywords: ['sip', 'mutual fund', 'investment', 'returns', 'compound'] };

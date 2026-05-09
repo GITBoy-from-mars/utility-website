@@ -1,0 +1,1 @@
+export default { id: 'word-to-pdf', name: 'Word to PDF', slug: 'word-to-pdf', description: 'Convert Word (.docx) documents to professional PDF files', category: 'converters', icon: 'FileWord', keywords: ['word', 'pdf', 'docx', 'convert', 'document'], batchSupport: true, acceptedFiles: '.docx,.doc', maxFileSize: '50MB' };

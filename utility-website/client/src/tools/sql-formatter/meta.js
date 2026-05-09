@@ -1,0 +1,1 @@
+export default { id: 'sql-formatter', name: 'SQL Formatter', slug: 'sql-formatter', description: 'Format and beautify SQL queries with syntax highlighting', category: 'developer-tools', icon: 'Code', keywords: ['sql', 'format', 'beautify', 'query', 'database'] };

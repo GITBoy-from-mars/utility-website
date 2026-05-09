@@ -1,0 +1,1 @@
+export default { id: 'coin-flip', name: 'Coin Flip', slug: 'coin-flip', description: 'Flip a virtual coin for quick random decisions with animated results', category: 'generators', icon: 'Zap', keywords: ['coin', 'flip', 'heads', 'tails', 'random', 'decision'] };

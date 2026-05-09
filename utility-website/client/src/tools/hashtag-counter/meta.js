@@ -1,0 +1,1 @@
+export default { id: 'hashtag-counter', name: 'Hashtag Counter', slug: 'hashtag-counter', description: 'Count and extract hashtags from any text or social media content', category: 'text-utilities', icon: 'Search', keywords: ['hashtag', 'count', 'social', 'instagram', 'twitter'] };

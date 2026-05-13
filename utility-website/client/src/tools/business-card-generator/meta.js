@@ -1,0 +1,1 @@
+export default { id: 'business-card-generator', name: 'Business Card Generator', slug: 'business-card-generator', description: 'Design and print professional business cards with custom layouts and colors', category: 'productivity', icon: 'Check', keywords: ['business card', 'generator', 'design', 'print', 'contact', 'professional'] };

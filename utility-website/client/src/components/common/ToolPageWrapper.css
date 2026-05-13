@@ -1,6 +1,6 @@
 .tool-page {
   min-height: 60vh;
-  padding-bottom: 80px;
+  padding-bottom: 40px;
 }
 
 .tool-breadcrumb {
@@ -11,6 +11,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .tool-breadcrumb a {
@@ -62,11 +63,12 @@
 .tool-content {
   max-width: 800px;
   margin: 0 auto;
-  padding-bottom: 60px;
+  padding: 0 16px 40px;
 }
 
 .tool-related {
-  padding-top: 60px;
+  padding-top: 40px;
+  padding-bottom: 20px;
   border-top: 1px solid var(--neutral-200);
   max-width: 800px;
   margin: 0 auto;
@@ -107,11 +109,28 @@
   opacity: 1;
 }
 
+/* Tablet */
+@media (max-width: 1024px) {
+  .tool-content { max-width: 100%; padding: 0 20px 40px; }
+  .tool-related { padding-left: 20px; padding-right: 20px; }
+}
+
+/* Mobile */
 @media (max-width: 768px) {
-  .tool-title {
-    font-size: 1.5rem;
-  }
-  .tool-related-grid {
-    grid-template-columns: 1fr;
-  }
+  .tool-header { padding: 28px 16px 20px; }
+  .tool-title { font-size: 1.5rem; }
+  .tool-description { font-size: 0.938rem; }
+  .tool-icon-wrap { width: 52px; height: 52px; margin-bottom: 14px; }
+  .tool-content { padding: 0 16px 32px; }
+  .tool-related-grid { grid-template-columns: 1fr; }
+  .tool-related { padding-left: 16px; padding-right: 16px; }
+  .tool-breadcrumb { padding-top: 16px; font-size: 0.75rem; }
+}
+
+/* Small phone */
+@media (max-width: 480px) {
+  .tool-header { padding: 20px 12px 16px; }
+  .tool-title { font-size: 1.25rem; }
+  .tool-description { font-size: 0.875rem; margin-bottom: 10px; }
+  .tool-content { padding: 0 12px 24px; }
 }

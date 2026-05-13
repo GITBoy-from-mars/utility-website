@@ -1,0 +1,1 @@
+export default { id: 'graphql-query-builder', name: 'GraphQL Query Builder', slug: 'graphql-query-builder', description: 'Build GraphQL queries and mutations visually with arguments and nested fields', category: 'developer-tools', icon: 'Code', keywords: ['graphql', 'query', 'mutation', 'builder', 'api', 'schema'] };

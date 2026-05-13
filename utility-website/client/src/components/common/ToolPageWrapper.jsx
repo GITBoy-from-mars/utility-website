@@ -6,6 +6,7 @@ import ToolHowTo from './ToolHowTo';
 import { Icon } from '../../assets/icons/icons';
 import { getToolsByCategory } from '../../tools/_registry';
 import { getToolFAQs, getToolHowTo } from '../../data/toolContent';
+import siteConfig from '../../config/siteConfig';
 import './ToolPageWrapper.css';
 
 const ToolPageWrapper = ({ meta, children }) => {
@@ -16,39 +17,94 @@ const ToolPageWrapper = ({ meta, children }) => {
   const faqs = meta.faqs || getToolFAQs(meta.slug);
   const howTo = meta.howTo || getToolHowTo(meta.slug);
 
-  // JSON-LD structured data for SEO
+  /* Per-page SEO title format: "Tool Name - Free Online Tool | UtiliTools" */
+  const seoTitle = `${meta.name} - Free Online ${meta.name.includes('Tool') ? '' : 'Tool'} | ${siteConfig.name}`;
+  const seoDesc = `${meta.description}. Free, no sign-up required. Use ${meta.name} online with ${siteConfig.name}.`;
+  const seoKeywords = [
+    ...(meta.keywords || []),
+    'free online tool',
+    'no signup',
+    meta.name.toLowerCase(),
+    `${meta.name.toLowerCase()} online`,
+    `free ${meta.name.toLowerCase()}`,
+  ].join(', ');
+  const toolUrl = `${siteConfig.url}/tools/${meta.slug}`;
+
+  /* JSON-LD: WebApplication + FAQ combined schema */
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: meta.name,
     description: meta.description,
-    url: `${window.location.origin}/tools/${meta.slug}`,
+    url: toolUrl,
     applicationCategory: 'UtilityApplication',
     operatingSystem: 'Any',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    ...(faqs && faqs.length > 0 ? {
-      mainEntity: faqs.map(f => ({
-        '@type': 'Question',
-        name: f.q,
-        acceptedAnswer: { '@type': 'Answer', text: f.a },
-      })),
-    } : {}),
+    browserRequirements: 'Requires JavaScript. Requires HTML5.',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+    provider: {
+      '@type': 'Organization',
+      name: siteConfig.company?.name || siteConfig.name,
+      url: siteConfig.url,
+    },
+  };
+
+  /* FAQ Schema (separate for better indexing) */
+  const faqSchema = faqs && faqs.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  } : null;
+
+  /* HowTo Schema */
+  const howToSchema = howTo && howTo.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: `How to Use ${meta.name}`,
+    step: howTo.map((step, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: step.title,
+      text: step.desc,
+    })),
+  } : null;
+
+  /* BreadcrumbList Schema */
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: siteConfig.url },
+      { '@type': 'ListItem', position: 2, name: 'Tools', item: `${siteConfig.url}/` },
+      { '@type': 'ListItem', position: 3, name: meta.name, item: toolUrl },
+    ],
   };
 
   return (
     <>
       <SEOHead
-        title={`${meta.name} — Free Online Tool`}
-        description={meta.description}
+        title={seoTitle}
+        description={seoDesc}
         slug={`/tools/${meta.slug}`}
-        keywords={meta.keywords?.join(', ')}
+        keywords={seoKeywords}
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />}
+      {howToSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />}
+
       <main className="tool-page">
         <nav className="tool-breadcrumb container" aria-label="Breadcrumb">
           <Link to="/">Home</Link>
           <span className="tool-breadcrumb-sep">/</span>
-          <Link to="/#tools">Tools</Link>
+          <Link to="/">Tools</Link>
           <span className="tool-breadcrumb-sep">/</span>
           <span className="tool-breadcrumb-current">{meta.name}</span>
         </nav>

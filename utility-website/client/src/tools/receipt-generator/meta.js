@@ -1,0 +1,1 @@
+export default { id: 'receipt-generator', name: 'Receipt Generator', slug: 'receipt-generator', description: 'Create professional receipts with custom fields, logo, and print-ready layout', category: 'productivity', icon: 'Check', keywords: ['receipt', 'generator', 'payment', 'proof', 'print', 'billing'] };

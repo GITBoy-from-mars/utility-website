@@ -1,0 +1,1 @@
+export default { id: 'landing-page-generator', name: 'Landing Page Generator', slug: 'landing-page-generator', description: 'Generate responsive HTML landing page code with customizable sections', category: 'developer-tools', icon: 'Code', keywords: ['landing page', 'generator', 'html', 'website', 'template', 'responsive'] };

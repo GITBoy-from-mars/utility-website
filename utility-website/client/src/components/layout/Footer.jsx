@@ -9,13 +9,10 @@ import './Footer.css';
 const Footer = () => {
   const year = new Date().getFullYear();
   const allTools = getAllTools();
-
-  // Get top tools across categories
   const popularTools = allTools.slice(0, 8);
 
   return (
     <footer className="footer" id="main-footer">
-      {/* Gradient accent line */}
       <div className="footer-accent" />
 
       <div className="footer-main container-lg">
@@ -70,15 +67,18 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Categories */}
+        {/* Categories — fixed to link to actual tool pages */}
         <div className="footer-col">
           <h4 className="footer-col-title">Categories</h4>
           <ul className="footer-links">
-            {categories.map(cat => (
-              <li key={cat.id}>
-                <Link to={`/#tools`} className="footer-link">{cat.name}</Link>
-              </li>
-            ))}
+            {categories.slice(0, 10).map(cat => {
+              const firstTool = getToolsByCategory(cat.id)[0];
+              return (
+                <li key={cat.id}>
+                  <Link to={firstTool ? firstTool.path : '/'} className="footer-link">{cat.name}</Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
 
@@ -114,13 +114,13 @@ const Footer = () => {
             &copy; {year} {siteConfig.company?.name || siteConfig.name}. All rights reserved.
           </p>
           <p className="footer-made">
-            Made with <span className="footer-heart">❤️</span> for productivity
+            Built for productivity
           </p>
           <div className="footer-bottom-links">
             <Link to="/privacy-policy">Privacy</Link>
-            <span className="footer-dot">·</span>
+            <span className="footer-dot">&middot;</span>
             <Link to="/data-storage">Terms</Link>
-            <span className="footer-dot">·</span>
+            <span className="footer-dot">&middot;</span>
             <Link to="/contact">Support</Link>
           </div>
         </div>

@@ -170,8 +170,9 @@
 /* Dynamic Related Tools Bar */
 .header-related {
   background: var(--neutral-50);
+  border-top: 1px solid var(--neutral-200);
   border-bottom: 1px solid var(--neutral-200);
-  padding: 0;
+  padding: 6px 0;
   overflow: hidden;
 }
 
@@ -179,7 +180,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  height: 36px;
+  min-height: 32px;
+  padding: 4px 0;
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -281,5 +283,13 @@
   .header-nav { display: none; }
   .header-mobile-btn { display: block; }
   .header-mobile-menu { display: block; }
-  .header-related-inner { padding: 0 16px; }
+  .header-related-inner { padding: 4px 16px; }
+  .header-related-tools { flex-wrap: wrap; gap: 6px; }
+  .header-inner { padding: 0 16px; }
+}
+
+@media (max-width: 480px) {
+  .header-inner { height: 56px; }
+  .header-logo-text { font-size: 1rem; }
+  .header-mega-inner { grid-template-columns: 1fr; gap: 20px; padding: 20px 16px; }
 }

@@ -1,0 +1,1 @@
+export default { id: 'sql-query-builder', name: 'SQL Query Builder', slug: 'sql-query-builder', description: 'Build SQL queries visually with SELECT, WHERE, JOIN, ORDER BY and more', category: 'developer-tools', icon: 'Code', keywords: ['sql', 'query', 'builder', 'database', 'select', 'where', 'join'] };

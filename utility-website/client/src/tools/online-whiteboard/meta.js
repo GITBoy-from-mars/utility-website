@@ -1,0 +1,1 @@
+export default { id: 'online-whiteboard', name: 'Online Whiteboard', slug: 'online-whiteboard', description: 'A simple freehand drawing whiteboard with pen colors, eraser, and export', category: 'productivity', icon: 'Check', keywords: ['whiteboard', 'draw', 'sketch', 'canvas', 'freehand', 'pen'] };

@@ -12,6 +12,10 @@ import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
 import DataStorage from './pages/DataStorage/DataStorage';
 import NotFound from './pages/NotFound/NotFound';
 
+/* Blog */
+import BlogHome from './pages/Blog/BlogHome';
+import BlogPost from './pages/Blog/BlogPost';
+
 const App = () => {
   const tools = getAllTools();
 
@@ -23,6 +27,10 @@ const App = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/data-storage" element={<DataStorage />} />
+
+        {/* Blog */}
+        <Route path="/blog" element={<BlogHome />} />
+        <Route path="/blog/:category/:slug" element={<BlogPost />} />
 
         {/* Auto-registered tool routes */}
         {tools.map((tool) => {

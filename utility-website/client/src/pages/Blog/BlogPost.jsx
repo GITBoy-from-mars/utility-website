@@ -1,0 +1,141 @@
+import React, { useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { getPostBySlug, getPostsByCategory, getRecentPosts, getAllCategories } from '../../blog/_registry';
+import siteConfig from '../../config/siteConfig';
+import './Blog.css';
+
+const BlogPost = () => {
+  const { category, slug } = useParams();
+  const post = getPostBySlug(category, slug);
+  const [commentName, setCommentName] = useState('');
+  const [commentText, setCommentText] = useState('');
+  const [comments, setComments] = useState([]);
+
+  if (!post) return (
+    <div className="blog-page container-lg" style={{ textAlign: 'center', padding: '80px 0' }}>
+      <h1>Post Not Found</h1>
+      <p style={{ color: 'var(--neutral-500)', margin: '12px 0 24px' }}>The blog post you're looking for doesn't exist.</p>
+      <Link to="/blog" className="btn btn-primary">Back to Blog</Link>
+    </div>
+  );
+
+  const relatedPosts = getPostsByCategory(category).filter(p => p.slug !== slug).slice(0, 3);
+  const recentPosts = getRecentPosts(5).filter(p => p.slug !== slug).slice(0, 4);
+  const categories = getAllCategories();
+
+  const addComment = (e) => {
+    e.preventDefault();
+    if (!commentName.trim() || !commentText.trim()) return;
+    setComments(prev => [...prev, { name: commentName, text: commentText, date: new Date().toISOString() }]);
+    setCommentName(''); setCommentText('');
+  };
+
+  return (
+    <>
+      <Helmet>
+        <title>{post.title} | {siteConfig.name} Blog</title>
+        <meta name="description" content={post.excerpt} />
+        <meta property="og:title" content={post.title} />
+        <meta property="og:description" content={post.excerpt} />
+        <meta property="og:type" content="article" />
+        <script type="application/ld+json">{JSON.stringify({
+          '@context': 'https://schema.org', '@type': 'BlogPosting',
+          headline: post.title, description: post.excerpt, datePublished: post.date,
+          author: { '@type': 'Person', name: post.author },
+        })}</script>
+      </Helmet>
+
+      <div className="blog-page container-lg">
+        <div className="blog-layout">
+          <article className="blog-article">
+            {/* Breadcrumb */}
+            <nav className="blog-breadcrumb">
+              <Link to="/">Home</Link> / <Link to="/blog">Blog</Link> / <Link to={`/blog?cat=${post.category}`}>{post.categoryName}</Link> / <span>{post.title}</span>
+            </nav>
+
+            {/* Header */}
+            <header className="blog-article-header">
+              <span className="blog-badge">{post.categoryName}</span>
+              <h1 className="blog-article-title">{post.title}</h1>
+              <div className="blog-post-meta" style={{ fontSize: '0.875rem' }}>
+                <span>{post.author}</span>
+                <span className="blog-dot">·</span>
+                <time>{new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+              </div>
+            </header>
+
+            {post.image && <img src={post.image} alt={post.title} className="blog-article-img" />}
+
+            {/* Content */}
+            <div className="blog-article-content" dangerouslySetInnerHTML={{ __html: post.content }} />
+
+            {/* Tags */}
+            {post.tags.length > 0 && (
+              <div className="blog-tags">
+                {post.tags.map(tag => <span key={tag} className="blog-tag">{tag}</span>)}
+              </div>
+            )}
+
+            {/* Related Posts */}
+            {relatedPosts.length > 0 && (
+              <div className="blog-related">
+                <h3 className="blog-related-title">Related Posts in {post.categoryName}</h3>
+                <div className="blog-related-grid">
+                  {relatedPosts.map(rp => (
+                    <Link key={rp.slug} to={rp.path} className="blog-related-card">
+                      <h4>{rp.title}</h4>
+                      <time>{new Date(rp.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</time>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Comments */}
+            <div className="blog-comments">
+              <h3 className="blog-comments-title">Comments ({comments.length})</h3>
+              {comments.map((c, i) => (
+                <div key={i} className="blog-comment">
+                  <div className="blog-comment-avatar">{c.name.charAt(0).toUpperCase()}</div>
+                  <div><strong>{c.name}</strong><time>{new Date(c.date).toLocaleDateString()}</time><p>{c.text}</p></div>
+                </div>
+              ))}
+              <form onSubmit={addComment} className="blog-comment-form">
+                <h4>Leave a Comment</h4>
+                <input value={commentName} onChange={e => setCommentName(e.target.value)} placeholder="Your name" required className="blog-comment-input" />
+                <textarea value={commentText} onChange={e => setCommentText(e.target.value)} placeholder="Write your comment..." required rows={3} className="blog-comment-input" />
+                <button type="submit" className="btn btn-primary">Post Comment</button>
+              </form>
+            </div>
+          </article>
+
+          {/* Sidebar */}
+          <aside className="blog-sidebar">
+            <div className="blog-sidebar-section">
+              <h3 className="blog-sidebar-title">Categories</h3>
+              <ul className="blog-sidebar-cats">
+                {categories.map(cat => (
+                  <li key={cat.id}><Link to={`/blog?cat=${cat.id}`}>{cat.name} <span>{cat.count}</span></Link></li>
+                ))}
+              </ul>
+            </div>
+            <div className="blog-sidebar-section">
+              <h3 className="blog-sidebar-title">Recent Posts</h3>
+              <div className="blog-sidebar-recent">
+                {recentPosts.map(rp => (
+                  <Link key={rp.slug} to={rp.path} className="blog-sidebar-post">
+                    <span className="blog-sidebar-post-title">{rp.title}</span>
+                    <time className="blog-sidebar-post-date">{new Date(rp.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</time>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default BlogPost;

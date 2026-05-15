@@ -6,71 +6,59 @@ import './InvoiceGenerator.css';
 
 const defaultItems = [{ desc: 'Web Development Service', qty: 1, rate: 50000 }, { desc: 'UI/UX Design', qty: 1, rate: 25000 }];
 
-const templates = {
-  modern: {
-    name: 'Modern', primary: '#3B82F6', headerBg: '#3B82F6', headerText: '#fff', tableBg: '#3B82F6', metaBg: '#EFF6FF', accent: '#2563EB',
-    font: "'Segoe UI', sans-serif",
-    headerStyle: 'display:flex;justify-content:space-between;margin-bottom:28px;padding-bottom:20px;border-bottom:3px solid #3B82F6',
-    tableStyle: 'border-collapse:collapse;width:100%;margin-bottom:24px',
-  },
-  classic: {
-    name: 'Classic', primary: '#1a1a2e', headerBg: '#1a1a2e', headerText: '#fff', tableBg: '#1a1a2e', metaBg: '#f5f5f5', accent: '#16213e',
-    font: "'Georgia', serif",
-    headerStyle: 'display:flex;justify-content:space-between;margin-bottom:28px;padding:24px;background:#1a1a2e;color:#fff;border-radius:8px',
-    tableStyle: 'border-collapse:collapse;width:100%;margin-bottom:24px',
-  },
-  minimal: {
-    name: 'Minimal', primary: '#333', headerBg: '#fff', headerText: '#333', tableBg: '#555', metaBg: '#fafafa', accent: '#888',
-    font: "'Helvetica Neue', sans-serif",
-    headerStyle: 'display:flex;justify-content:space-between;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid #ddd',
-    tableStyle: 'border-collapse:collapse;width:100%;margin-bottom:24px',
-  },
-  corporate: {
-    name: 'Corporate', primary: '#0D47A1', headerBg: '#0D47A1', headerText: '#fff', tableBg: '#0D47A1', metaBg: '#E3F2FD', accent: '#1565C0',
-    font: "'Arial', sans-serif",
-    headerStyle: 'display:flex;justify-content:space-between;margin-bottom:28px;padding:20px 24px;background:linear-gradient(135deg,#0D47A1,#1565C0);color:#fff;border-radius:8px',
-    tableStyle: 'border-collapse:collapse;width:100%;margin-bottom:24px',
-  },
-  creative: {
-    name: 'Creative', primary: '#7C3AED', headerBg: '#7C3AED', headerText: '#fff', tableBg: '#7C3AED', metaBg: '#F5F3FF', accent: '#EC4899',
-    font: "'Poppins', sans-serif",
-    headerStyle: 'display:flex;justify-content:space-between;margin-bottom:28px;padding:24px;background:linear-gradient(135deg,#7C3AED,#EC4899);color:#fff;border-radius:12px',
-    tableStyle: 'border-collapse:collapse;width:100%;margin-bottom:24px',
-  },
-  executive: {
-    name: 'Executive', primary: '#1E3A5F', headerBg: '#1E3A5F', headerText: '#F0E6D3', tableBg: '#1E3A5F', metaBg: '#F8F6F0', accent: '#C9A96E',
-    font: "'Cambria', 'Georgia', serif",
-    headerStyle: 'display:flex;justify-content:space-between;margin-bottom:28px;padding:28px 24px;background:#1E3A5F;color:#F0E6D3;border-radius:4px;border-left:6px solid #C9A96E',
-    tableStyle: 'border-collapse:collapse;width:100%;margin-bottom:24px',
-  },
-  startup: {
-    name: 'Startup', primary: '#FF6B35', headerBg: '#fff', headerText: '#222', tableBg: '#FF6B35', metaBg: '#FFF5F0', accent: '#FF6B35',
-    font: "'Inter', 'Segoe UI', sans-serif",
-    headerStyle: 'display:flex;justify-content:space-between;margin-bottom:28px;padding-bottom:20px;border-bottom:4px solid #FF6B35',
-    tableStyle: 'border-collapse:collapse;width:100%;margin-bottom:24px;border-radius:8px;overflow:hidden',
-  },
-  ocean: {
-    name: 'Ocean', primary: '#0891B2', headerBg: '#0891B2', headerText: '#fff', tableBg: '#0891B2', metaBg: '#ECFEFF', accent: '#06B6D4',
-    font: "'Segoe UI', sans-serif",
-    headerStyle: 'display:flex;justify-content:space-between;margin-bottom:28px;padding:24px;background:linear-gradient(135deg,#0891B2,#0EA5E9);color:#fff;border-radius:16px',
-    tableStyle: 'border-collapse:collapse;width:100%;margin-bottom:24px',
-  },
-  emerald: {
-    name: 'Emerald', primary: '#065F46', headerBg: '#065F46', headerText: '#D1FAE5', tableBg: '#065F46', metaBg: '#ECFDF5', accent: '#10B981',
-    font: "'Segoe UI', sans-serif",
-    headerStyle: 'display:flex;justify-content:space-between;margin-bottom:28px;padding:24px;background:#065F46;color:#D1FAE5;border-radius:8px;border-bottom:4px solid #10B981',
-    tableStyle: 'border-collapse:collapse;width:100%;margin-bottom:24px',
-  },
-  midnight: {
-    name: 'Midnight', primary: '#312E81', headerBg: '#312E81', headerText: '#E0E7FF', tableBg: '#312E81', metaBg: '#EEF2FF', accent: '#6366F1',
-    font: "'Segoe UI', sans-serif",
-    headerStyle: 'display:flex;justify-content:space-between;margin-bottom:28px;padding:24px 28px;background:linear-gradient(135deg,#312E81,#4338CA);color:#E0E7FF;border-radius:10px',
-    tableStyle: 'border-collapse:collapse;width:100%;margin-bottom:24px',
-  },
+/* Each template defines: colors + a unique printCSS function that returns the full stylesheet */
+const TEMPLATES = [
+  { id:'corporate', name:'Corporate', primary:'#1B3A5C', accent:'#E8EDF2', table:'#1B3A5C' },
+  { id:'executive', name:'Executive', primary:'#2C3E50', accent:'#F8F6F0', table:'#2C3E50', gold:'#B8860B' },
+  { id:'minimal', name:'Minimal', primary:'#333333', accent:'#FAFAFA', table:'#444' },
+  { id:'modern', name:'Modern', primary:'#0066CC', accent:'#F0F6FF', table:'#0066CC' },
+  { id:'startup', name:'Startup', primary:'#E84D1A', accent:'#FFF8F5', table:'#E84D1A' },
+  { id:'legal', name:'Legal', primary:'#1A1A2E', accent:'#F5F5F5', table:'#1A1A2E' },
+  { id:'consulting', name:'Consulting', primary:'#2D5F2D', accent:'#F0F7F0', table:'#2D5F2D' },
+  { id:'finance', name:'Finance', primary:'#003366', accent:'#EDF2F7', table:'#003366', stripe:'#F7FAFC' },
+  { id:'tech', name:'Tech', primary:'#4A148C', accent:'#F3E5F5', table:'#4A148C' },
+  { id:'elegant', name:'Elegant', primary:'#1C1C1C', accent:'#FAFAF8', table:'#1C1C1C', gold:'#C5A55A' },
+];
+
+const getPrintCSS = (t, template) => {
+  const isGold = t.gold;
+  const borderAccent = isGold ? t.gold : t.primary;
+  return `*{margin:0;padding:0;box-sizing:border-box}
+body{padding:0;color:#222;font-size:12px;font-family:'Segoe UI',Arial,sans-serif}
+.page{padding:40px 48px;position:relative;min-height:100vh}
+.page::before{content:'';position:absolute;top:0;left:0;width:6px;height:100%;background:${t.primary}}
+.page::after{content:'${template === 'legal' ? '' : ''}';position:absolute;bottom:40px;right:48px;font-size:72px;font-weight:900;color:${t.primary};opacity:0.03;text-transform:uppercase;letter-spacing:4px}
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:24px;margin-bottom:24px;border-bottom:2px solid ${t.primary}}
+.hdr-logo img{max-height:52px;margin-bottom:6px}
+.hdr-co{font-size:10px;color:#555;line-height:1.8}
+.hdr-co b{font-size:14px;color:#111;display:block;margin-bottom:2px;letter-spacing:0.3px}
+.hdr-right{text-align:right}
+.hdr-type{font-size:24px;font-weight:800;color:${t.primary};text-transform:uppercase;letter-spacing:2px}
+.hdr-num{font-size:10px;color:#888;margin-top:2px;letter-spacing:0.5px}
+.meta{display:flex;justify-content:space-between;padding:16px 20px;margin-bottom:24px;background:${t.accent};border-left:3px solid ${borderAccent}}
+.meta-g{font-size:10px;line-height:2;color:#444}
+.meta-g b{display:block;font-size:10px;color:${t.primary};text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;font-weight:700}
+table{width:100%;border-collapse:collapse;margin-bottom:24px}
+th{background:${t.table};color:#fff;padding:9px 14px;font-size:9px;text-align:left;text-transform:uppercase;letter-spacing:1px;font-weight:600}
+th:first-child{width:30px}
+td{padding:9px 14px;font-size:11px;border-bottom:1px solid #E5E5E5}
+tr:nth-child(even) td{background:${t.stripe || '#FAFAFA'}}
+.tr{text-align:right}
+.tots{display:flex;justify-content:flex-end}
+.tots-t{width:260px}
+.tots-r{display:flex;justify-content:space-between;padding:5px 0;font-size:11px;color:#444;border-bottom:1px solid #eee}
+.tots-r.disc{color:#C41E3A}
+.tots-r.total{font-size:15px;font-weight:800;border-top:2px solid ${t.primary};border-bottom:none;padding-top:10px;margin-top:4px;color:${t.primary}}
+.ftr{margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ftr-s{padding:12px 14px;background:${t.accent};font-size:10px;color:#555;line-height:1.7;border-left:2px solid ${borderAccent}}
+.ftr-s b{display:block;margin-bottom:3px;color:#222;font-size:10px;text-transform:uppercase;letter-spacing:0.5px}
+.stamp{margin-top:44px;text-align:right;padding-top:44px}
+.stamp-l{border-top:1px solid #222;display:inline-block;padding-top:6px;font-size:9px;color:#555;min-width:180px;text-align:center;text-transform:uppercase;letter-spacing:1px}
+@media print{.page{padding:24px 32px}.page::before{width:4px}}`;
 };
 
 const InvoiceGenerator = () => {
-  const [template, setTemplate] = useState('modern');
+  const [tplIdx, setTplIdx] = useState(0);
   const [logo, setLogo] = useState(null);
   const [company, setCompany] = useState({ name: 'Your Company', address: '123 Business Ave, City, State 560001', phone: '+91 98765 43210', email: 'info@company.com', gst: '', pan: '' });
   const [client, setClient] = useState({ name: 'Client Name', address: 'Client Address, City', email: 'client@email.com', phone: '' });
@@ -84,8 +72,8 @@ const InvoiceGenerator = () => {
   const printRef = useRef(null);
 
   const addItem = () => setItems([...items, { desc: '', qty: 1, rate: 0 }]);
-  const updateItem = (i, field, val) => { const c = [...items]; c[i] = { ...c[i], [field]: field === 'desc' ? val : +val }; setItems(c); };
-  const removeItem = i => setItems(items.filter((_, idx) => idx !== i));
+  const updateItem = (i, f, v) => { const c = [...items]; c[i] = { ...c[i], [f]: f === 'desc' ? v : +v }; setItems(c); };
+  const removeItem = i => setItems(items.filter((_, x) => x !== i));
 
   const subtotal = items.reduce((s, it) => s + it.qty * it.rate, 0);
   const discountAmt = subtotal * (discount / 100);
@@ -94,73 +82,56 @@ const InvoiceGenerator = () => {
   const total = taxable + tax;
   const fmt = n => '\u20B9' + n.toLocaleString('en-IN', { minimumFractionDigits: 2 });
 
-  const t = templates[template];
-
+  const t = TEMPLATES[tplIdx];
   const handleLogo = e => { const f = e.target.files[0]; if (f) { const r = new FileReader(); r.onload = ev => setLogo(ev.target.result); r.readAsDataURL(f); } };
 
+  const buildHTML = () => `<div class="page">
+<div class="hdr"><div>${logo ? `<div class="hdr-logo"><img src="${logo}" alt="Logo"></div>` : ''}
+<div class="hdr-co"><b>${company.name}</b>${company.address}<br>
+${company.phone ? 'Tel: ' + company.phone + '<br>' : ''}${company.email ? company.email + '<br>' : ''}
+${company.gst ? 'GSTIN: ' + company.gst + '<br>' : ''}${company.pan ? 'PAN: ' + company.pan : ''}</div></div>
+<div class="hdr-right"><div class="hdr-type">${inv.type}</div><div class="hdr-num">#${inv.number}</div></div></div>
+<div class="meta"><div class="meta-g"><b>Bill To</b>${client.name}<br>${client.address}<br>
+${client.email ? client.email + '<br>' : ''}${client.phone ? 'Tel: ' + client.phone : ''}</div>
+<div class="meta-g" style="text-align:right"><b>Details</b>Date: ${inv.date}<br>
+${inv.due ? 'Due: ' + inv.due + '<br>' : ''}Status: <span style="color:#B8860B;font-weight:700">Pending</span></div></div>
+<table><thead><tr><th>#</th><th>Description</th><th class="tr">Qty</th><th class="tr">Rate</th><th class="tr">Amount</th></tr></thead>
+<tbody>${items.map((it, i) => `<tr><td>${i + 1}</td><td>${it.desc || '\u2014'}</td><td class="tr">${it.qty}</td><td class="tr">${fmt(it.rate)}</td><td class="tr" style="font-weight:600">${fmt(it.qty * it.rate)}</td></tr>`).join('')}</tbody></table>
+<div class="tots"><div class="tots-t">
+<div class="tots-r"><span>Subtotal</span><span>${fmt(subtotal)}</span></div>
+${discount > 0 ? `<div class="tots-r disc"><span>Discount (${discount}%)</span><span>-${fmt(discountAmt)}</span></div>` : ''}
+<div class="tots-r"><span>Tax (${taxRate}%)</span><span>${fmt(tax)}</span></div>
+<div class="tots-r total"><span>Total</span><span>${fmt(total)}</span></div></div></div>
+<div class="ftr">${notes || terms ? `<div class="ftr-s">${notes ? '<b>Notes</b>' + notes + '<br><br>' : ''}${terms ? '<b>Terms &amp; Conditions</b>' + terms : ''}</div>` : ''}
+${bankDetails.bank ? `<div class="ftr-s"><b>Bank Details</b>Bank: ${bankDetails.bank}<br>A/C: ${bankDetails.account}<br>IFSC: ${bankDetails.ifsc}</div>` : ''}</div>
+<div class="stamp"><div class="stamp-l">Authorized Signatory</div></div></div>`;
+
   const print = () => {
-    const content = printRef.current;
     const win = window.open('', '_blank');
-    win.document.write(`<html><head><title>${inv.type} ${inv.number}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-      *{margin:0;padding:0;box-sizing:border-box;font-family:${t.font}}
-      body{padding:40px;color:#1a1a2e;font-size:13px}
-      .inv-header{${t.headerStyle}}
-      .inv-logo img{max-height:60px;margin-bottom:8px}
-      .inv-company{font-size:11px;color:${template === 'classic' || template === 'corporate' || template === 'creative' || template === 'executive' || template === 'ocean' || template === 'emerald' || template === 'midnight' ? 'rgba(255,255,255,0.8)' : '#555'};line-height:1.6}
-      .inv-company strong{font-size:14px;color:${template === 'classic' || template === 'corporate' || template === 'creative' || template === 'executive' || template === 'ocean' || template === 'emerald' || template === 'midnight' ? '#fff' : '#222'}}
-      .inv-title{font-size:32px;font-weight:800;color:${template === 'minimal' || template === 'startup' ? t.primary : 'inherit'};text-align:right;text-transform:uppercase;letter-spacing:1px}
-      .inv-title-sub{font-size:11px;color:${template === 'minimal' || template === 'startup' ? '#888' : 'rgba(255,255,255,0.7)'};text-align:right;margin-top:4px}
-      .inv-meta{display:flex;justify-content:space-between;margin-bottom:24px;padding:16px 20px;background:${t.metaBg};border-radius:8px;border-left:4px solid ${t.primary}}
-      .inv-meta-group{font-size:11px;line-height:1.8;color:#444}
-      .inv-meta-group strong{display:block;font-size:12px;margin-bottom:2px;color:${t.primary};text-transform:uppercase;letter-spacing:0.5px}
-      table{${t.tableStyle}}
-      th{background:${t.tableBg};color:#fff;padding:10px 14px;font-size:11px;text-align:left;text-transform:uppercase;letter-spacing:0.5px}
-      td{padding:10px 14px;border-bottom:1px solid #eee;font-size:12px}
-      tr:nth-child(even) td{background:#fafafa}
-      .text-right{text-align:right}
-      .inv-totals{display:flex;justify-content:flex-end}
-      .inv-totals-table{width:280px}
-      .inv-totals-row{display:flex;justify-content:space-between;padding:6px 0;font-size:12px;border-bottom:1px solid #eee}
-      .inv-totals-row.discount{color:#E11D48}
-      .inv-totals-row.total{font-size:16px;font-weight:800;border-top:3px solid ${t.primary};border-bottom:none;padding-top:12px;color:${t.primary}}
-      .inv-footer{margin-top:32px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
-      .inv-footer-section{padding:14px 16px;background:#f8f9fa;border-radius:6px;font-size:11px;color:#555;line-height:1.6}
-      .inv-footer-section strong{display:block;margin-bottom:4px;color:#333;font-size:12px}
-      .inv-stamp{margin-top:40px;text-align:right;padding-top:40px}
-      .inv-stamp-line{border-top:1px solid #333;display:inline-block;padding-top:6px;font-size:11px;color:#555;min-width:200px;text-align:center}
-      @media print{body{padding:20px}}
-    </style></head><body>`);
-    win.document.write(content.innerHTML);
-    win.document.write('</body></html>');
+    win.document.write(`<html><head><title>${inv.type} ${inv.number}</title><style>${getPrintCSS(t, t.id)}</style></head><body>${buildHTML()}</body></html>`);
     win.document.close();
     setTimeout(() => { win.print(); win.close(); }, 600);
   };
-
-  const darkHeader = ['classic','corporate','creative','executive','ocean','emerald','midnight'].includes(template);
 
   return (
     <ToolPageWrapper meta={meta}>
       <div className="invoice-tool">
         <div className="invoice-controls">
           <h3 className="inv-section-title">Settings</h3>
-          <div className="form-group"><label>Template Style</label>
+          <div className="form-group"><label>Template</label>
             <div className="inv-template-grid">
-              {Object.entries(templates).map(([k, v]) => (
-                <button key={k} className={`inv-template-btn ${template === k ? 'active' : ''}`} onClick={() => setTemplate(k)} style={{ borderColor: template === k ? v.primary : 'var(--neutral-200)' }}>
-                  <div className="inv-template-preview" style={{ background: v.primary === '#333' || v.primary === '#fff' ? v.accent : v.primary }} />
-                  <span>{v.name}</span>
+              {TEMPLATES.map((tp, i) => (
+                <button key={tp.id} className={`inv-template-btn ${tplIdx === i ? 'active' : ''}`} onClick={() => setTplIdx(i)} style={{ borderColor: tplIdx === i ? tp.primary : undefined }}>
+                  <div className="inv-template-preview" style={{ background: tp.primary }} />
+                  <span>{tp.name}</span>
                 </button>
               ))}
             </div>
           </div>
           <div className="form-group"><label>Logo</label><input type="file" accept="image/*" onChange={handleLogo} style={{ fontSize: '0.813rem' }} /></div>
-          <div className="form-group"><label>Document Type</label><select value={inv.type} onChange={e => setInv({ ...inv, type: e.target.value })} className="qr-select"><option>Invoice</option><option>Quotation</option><option>Proforma Invoice</option><option>Tax Invoice</option><option>Credit Note</option><option>Delivery Challan</option></select></div>
+          <div className="form-group"><label>Document Type</label><select value={inv.type} onChange={e => setInv({ ...inv, type: e.target.value })} className="qr-select"><option>Invoice</option><option>Quotation</option><option>Proforma Invoice</option><option>Tax Invoice</option><option>Credit Note</option></select></div>
           <div style={{ display: 'flex', gap: 8 }}>
             <div className="form-group" style={{ flex: 1 }}><label>Number</label><input value={inv.number} onChange={e => setInv({ ...inv, number: e.target.value })} className="calc-input" /></div>
-          </div>
-          <div style={{ display: 'flex', gap: 8 }}>
             <div className="form-group" style={{ flex: 1 }}><label>Date</label><input type="date" value={inv.date} onChange={e => setInv({ ...inv, date: e.target.value })} className="calc-input" /></div>
             <div className="form-group" style={{ flex: 1 }}><label>Due Date</label><input type="date" value={inv.due} onChange={e => setInv({ ...inv, due: e.target.value })} className="calc-input" /></div>
           </div>
@@ -190,18 +161,16 @@ const InvoiceGenerator = () => {
           <div className="form-group"><label>IFSC Code</label><input value={bankDetails.ifsc} onChange={e => setBankDetails({ ...bankDetails, ifsc: e.target.value })} className="calc-input" /></div>
           <hr />
           <div className="form-group"><label>Notes</label><textarea value={notes} onChange={e => setNotes(e.target.value)} className="devtool-textarea" rows={2} /></div>
-          <div className="form-group"><label>Terms and Conditions</label><textarea value={terms} onChange={e => setTerms(e.target.value)} className="devtool-textarea" rows={2} /></div>
+          <div className="form-group"><label>Terms</label><textarea value={terms} onChange={e => setTerms(e.target.value)} className="devtool-textarea" rows={2} /></div>
           <button onClick={print} className="btn btn-primary btn-lg" style={{ width: '100%', marginTop: 8 }}><Icon name="Download" size={18} />Download / Print PDF</button>
         </div>
 
         {/* LIVE PREVIEW */}
-        <div className="invoice-preview" ref={printRef}>
-          <div className="inv-header" style={darkHeader ? { padding: '24px', background: t.headerBg.includes('gradient') ? t.headerBg.replace('linear-gradient', 'linear-gradient') : t.headerBg, color: t.headerText, borderRadius: 8 } : { borderBottom: `3px solid ${t.primary}`, paddingBottom: 20 }}>
+        <div className="invoice-preview" ref={printRef} style={{ borderLeft: `5px solid ${t.primary}` }}>
+          <div className="inv-header" style={{ borderBottom: `2px solid ${t.primary}` }}>
             <div>
               {logo && <div className="inv-logo"><img src={logo} alt="Logo" /></div>}
-              <div className="inv-company" style={darkHeader ? { color: 'rgba(255,255,255,0.8)' } : {}}>
-                <strong style={darkHeader ? { color: '#fff' } : {}}>{company.name}</strong><br />
-                {company.address}<br />
+              <div className="inv-company"><strong>{company.name}</strong>{company.address}<br />
                 {company.phone && <>Tel: {company.phone}<br /></>}
                 {company.email && <>{company.email}<br /></>}
                 {company.gst && <>GSTIN: {company.gst}<br /></>}
@@ -209,40 +178,19 @@ const InvoiceGenerator = () => {
               </div>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <div className="inv-title" style={darkHeader ? { color: 'inherit' } : { color: t.primary }}>{inv.type}</div>
-              <div className="inv-title-sub" style={darkHeader ? { color: 'rgba(255,255,255,0.6)' } : {}}>#{inv.number}</div>
+              <div className="inv-title" style={{ color: t.primary }}>{inv.type}</div>
+              <div className="inv-title-sub">#{inv.number}</div>
             </div>
           </div>
 
-          <div className="inv-meta" style={{ background: t.metaBg, borderLeftColor: t.primary }}>
-            <div className="inv-meta-group">
-              <strong style={{ color: t.primary }}>Bill To</strong>
-              {client.name}<br />
-              {client.address}<br />
-              {client.email && <>{client.email}<br /></>}
-              {client.phone && <>Tel: {client.phone}</>}
-            </div>
-            <div className="inv-meta-group" style={{ textAlign: 'right' }}>
-              <strong style={{ color: t.primary }}>Invoice Details</strong>
-              Date: {inv.date}<br />
-              {inv.due && <>Due: {inv.due}<br /></>}
-              Status: <span style={{ color: '#F59E0B', fontWeight: 700 }}>Pending</span>
-            </div>
+          <div className="inv-meta" style={{ background: t.accent, borderLeft: `3px solid ${t.gold || t.primary}` }}>
+            <div className="inv-meta-group"><strong style={{ color: t.primary }}>Bill To</strong>{client.name}<br />{client.address}<br />{client.email && <>{client.email}<br /></>}{client.phone && <>Tel: {client.phone}</>}</div>
+            <div className="inv-meta-group" style={{ textAlign: 'right' }}><strong style={{ color: t.primary }}>Details</strong>Date: {inv.date}<br />{inv.due && <>Due: {inv.due}<br /></>}Status: <span style={{ color: '#B8860B', fontWeight: 700 }}>Pending</span></div>
           </div>
 
           <table>
-            <thead><tr><th style={{ width: 30, background: t.tableBg }}>#</th><th style={{ background: t.tableBg }}>Description</th><th className="text-right" style={{ background: t.tableBg }}>Qty</th><th className="text-right" style={{ background: t.tableBg }}>Rate</th><th className="text-right" style={{ background: t.tableBg }}>Amount</th></tr></thead>
-            <tbody>
-              {items.map((it, i) => (
-                <tr key={i}>
-                  <td>{i + 1}</td>
-                  <td>{it.desc || '\u2014'}</td>
-                  <td className="text-right">{it.qty}</td>
-                  <td className="text-right">{fmt(it.rate)}</td>
-                  <td className="text-right" style={{ fontWeight: 600 }}>{fmt(it.qty * it.rate)}</td>
-                </tr>
-              ))}
-            </tbody>
+            <thead><tr><th style={{ background: t.table, width: 30 }}>#</th><th style={{ background: t.table }}>Description</th><th className="text-right" style={{ background: t.table }}>Qty</th><th className="text-right" style={{ background: t.table }}>Rate</th><th className="text-right" style={{ background: t.table }}>Amount</th></tr></thead>
+            <tbody>{items.map((it, i) => <tr key={i}><td>{i + 1}</td><td>{it.desc || '\u2014'}</td><td className="text-right">{it.qty}</td><td className="text-right">{fmt(it.rate)}</td><td className="text-right" style={{ fontWeight: 600 }}>{fmt(it.qty * it.rate)}</td></tr>)}</tbody>
           </table>
 
           <div className="inv-totals"><div className="inv-totals-table">
@@ -253,21 +201,10 @@ const InvoiceGenerator = () => {
           </div></div>
 
           <div className="inv-footer">
-            {(notes || terms) && <div className="inv-footer-section">
-              {notes && <><strong>Notes</strong>{notes}<br /><br /></>}
-              {terms && <><strong>Terms and Conditions</strong>{terms}</>}
-            </div>}
-            {bankDetails.bank && <div className="inv-footer-section">
-              <strong>Bank Details</strong>
-              Bank: {bankDetails.bank}<br />
-              A/C: {bankDetails.account}<br />
-              IFSC: {bankDetails.ifsc}
-            </div>}
+            {(notes || terms) && <div className="inv-footer-section" style={{ background: t.accent, borderLeft: `2px solid ${t.gold || t.primary}` }}>{notes && <><strong>Notes</strong>{notes}<br /><br /></>}{terms && <><strong>Terms &amp; Conditions</strong>{terms}</>}</div>}
+            {bankDetails.bank && <div className="inv-footer-section" style={{ background: t.accent, borderLeft: `2px solid ${t.gold || t.primary}` }}><strong>Bank Details</strong>Bank: {bankDetails.bank}<br />A/C: {bankDetails.account}<br />IFSC: {bankDetails.ifsc}</div>}
           </div>
-
-          <div className="inv-stamp">
-            <div className="inv-stamp-line">Authorized Signatory</div>
-          </div>
+          <div className="inv-stamp"><div className="inv-stamp-line">Authorized Signatory</div></div>
         </div>
       </div>
     </ToolPageWrapper>

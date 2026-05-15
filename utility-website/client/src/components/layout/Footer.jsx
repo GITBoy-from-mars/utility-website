@@ -99,6 +99,7 @@ const Footer = () => {
         <div className="footer-col">
           <h4 className="footer-col-title">Company</h4>
           <ul className="footer-links">
+            <li><Link to="/blog" className="footer-link">Blog</Link></li>
             <li><Link to="/about" className="footer-link">About Us</Link></li>
             <li><Link to="/contact" className="footer-link">Contact Us</Link></li>
             <li><Link to="/privacy-policy" className="footer-link">Privacy Policy</Link></li>

@@ -3,122 +3,96 @@ import ToolPageWrapper from '../../components/common/ToolPageWrapper';
 import { Icon } from '../../assets/icons/icons';
 import meta from './meta';
 
-const COLORS = ['#1a1a2e','#E03131','#2F9E44','#1971C2','#F08C00','#7048E8','#E64980','#0C8599'];
+const COLORS = ['#1e1e1e','#e03131','#2f9e44','#1971c2','#f08c00','#7048e8','#e64980','#0c8599','#ffffff'];
+const BG_COLORS = ['transparent','#ffc9c9','#b2f2bb','#a5d8ff','#ffec99','#d0bfff','#fcc2d7','#99e9f2'];
 const SIZES = [1, 2, 4, 8];
-const TOOLS = ['select','pen','line','arrow','rect','ellipse','diamond','text','eraser'];
-const TOOL_LABELS = { select:'Select', pen:'Pen', line:'Line', arrow:'Arrow', rect:'Rectangle', ellipse:'Ellipse', diamond:'Diamond', text:'Text', eraser:'Eraser' };
-const FILL_MODES = ['none','solid','hatch'];
-
+const TOOLS = [
+  { id:'select', label:'Select', key:'V', icon:'↖' },
+  { id:'pan', label:'Pan', key:'H', icon:'✋' },
+  { id:'pen', label:'Pen', key:'P', icon:'✏' },
+  { id:'line', label:'Line', key:'L', icon:'╲' },
+  { id:'arrow', label:'Arrow', key:'A', icon:'→' },
+  { id:'rect', label:'Rectangle', key:'R', icon:'□' },
+  { id:'ellipse', label:'Ellipse', key:'O', icon:'○' },
+  { id:'diamond', label:'Diamond', key:'D', icon:'◇' },
+  { id:'text', label:'Text', key:'T', icon:'A' },
+  { id:'eraser', label:'Eraser', key:'E', icon:'⌫' },
+];
+const FILL = ['none','solid','hatch'];
+const STROKE_STYLE = ['solid','dashed'];
 const uid = () => Math.random().toString(36).slice(2,8);
 
 const OnlineWhiteboard = () => {
   const canvasRef = useRef(null);
   const [tool, setTool] = useState('pen');
-  const [color, setColor] = useState('#1a1a2e');
-  const [lineWidth, setLineWidth] = useState(2);
-  const [fillMode, setFillMode] = useState('none');
+  const [color, setColor] = useState('#1e1e1e');
+  const [bgColor, setBgColor] = useState('transparent');
+  const [lw, setLw] = useState(2);
+  const [fill, setFill] = useState('none');
+  const [strokeStyle, setStrokeStyle] = useState('solid');
+  const [opacity, setOpacity] = useState(1);
   const [elements, setElements] = useState([]);
   const [history, setHistory] = useState([]);
+  const [redoStack, setRedoStack] = useState([]);
   const [drawing, setDrawing] = useState(false);
-  const [currentEl, setCurrentEl] = useState(null);
-  const [selectedId, setSelectedId] = useState(null);
-  const [dragOffset, setDragOffset] = useState(null);
-  const [textInput, setTextInput] = useState(null);
+  const [curEl, setCurEl] = useState(null);
+  const [selId, setSelId] = useState(null);
+  const [dragOff, setDragOff] = useState(null);
+  const [txtIn, setTxtIn] = useState(null);
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
-  const lastPos = useRef(null);
+  const [panning, setPanning] = useState(false);
+  const panStart = useRef(null);
+  const [showProps, setShowProps] = useState(true);
 
   const getPos = useCallback((e) => {
-    const rect = canvasRef.current.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    return { x: (clientX - rect.left - pan.x) / zoom, y: (clientY - rect.top - pan.y) / zoom };
+    const r = canvasRef.current.getBoundingClientRect();
+    const cx = e.touches ? e.touches[0].clientX : e.clientX;
+    const cy = e.touches ? e.touches[0].clientY : e.clientY;
+    return { x: (cx - r.left - pan.x) / zoom, y: (cy - r.top - pan.y) / zoom };
   }, [zoom, pan]);
 
-  const redraw = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+  const drawEl = useCallback((ctx, el, sel) => {
     ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Background
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    // Grid dots
-    ctx.fillStyle = '#E5E5E5';
-    const step = 20;
-    for (let x = (pan.x % (step * zoom)); x < canvas.width; x += step * zoom) {
-      for (let y = (pan.y % (step * zoom)); y < canvas.height; y += step * zoom) {
-        ctx.beginPath(); ctx.arc(x, y, 0.8, 0, Math.PI * 2); ctx.fill();
-      }
-    }
-    ctx.restore();
-    ctx.save();
-    ctx.translate(pan.x, pan.y);
-    ctx.scale(zoom, zoom);
-
-    const allEls = currentEl ? [...elements, currentEl] : elements;
-    allEls.forEach(el => drawElement(ctx, el, el.id === selectedId));
-    ctx.restore();
-  }, [elements, currentEl, selectedId, zoom, pan]);
-
-  const drawElement = (ctx, el, selected) => {
     ctx.strokeStyle = el.color;
-    ctx.lineWidth = el.strokeWidth;
+    ctx.lineWidth = el.lw;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    ctx.globalAlpha = el.opacity || 1;
+    ctx.globalAlpha = el.opacity ?? 1;
     ctx.setLineDash(el.dash ? [8, 4] : []);
 
-    const applyFill = () => {
-      if (el.fill === 'solid') { ctx.fillStyle = el.color + '22'; ctx.fill(); }
+    const doFill = () => {
+      if (el.fill === 'solid') { ctx.fillStyle = (el.bg && el.bg !== 'transparent') ? el.bg : el.color + '18'; ctx.fill(); }
       else if (el.fill === 'hatch') {
-        ctx.save();
-        ctx.clip();
-        ctx.strokeStyle = el.color + '33';
-        ctx.lineWidth = 1;
-        for (let i = -500; i < 500; i += 6) {
-          ctx.beginPath(); ctx.moveTo(i, -500); ctx.lineTo(i + 500, 0); ctx.stroke();
-        }
+        ctx.save(); ctx.clip(); ctx.strokeStyle = el.color + '30'; ctx.lineWidth = 1;
+        for (let i = -600; i < 600; i += 6) { ctx.beginPath(); ctx.moveTo(i, -600); ctx.lineTo(i + 600, 0); ctx.stroke(); }
         ctx.restore();
       }
     };
 
     switch (el.type) {
-      case 'pen': {
-        if (!el.points || el.points.length < 2) break;
-        ctx.beginPath();
-        ctx.moveTo(el.points[0].x, el.points[0].y);
-        for (let i = 1; i < el.points.length; i++) ctx.lineTo(el.points[i].x, el.points[i].y);
+      case 'pen': case 'eraser': {
+        if (!el.pts || el.pts.length < 2) break;
+        if (el.type === 'eraser') { ctx.globalCompositeOperation = 'destination-out'; ctx.lineWidth = el.lw * 4; }
+        ctx.beginPath(); ctx.moveTo(el.pts[0].x, el.pts[0].y);
+        // Smooth curve through points
+        for (let i = 1; i < el.pts.length - 1; i++) {
+          const mx = (el.pts[i].x + el.pts[i+1].x) / 2;
+          const my = (el.pts[i].y + el.pts[i+1].y) / 2;
+          ctx.quadraticCurveTo(el.pts[i].x, el.pts[i].y, mx, my);
+        }
+        ctx.lineTo(el.pts[el.pts.length-1].x, el.pts[el.pts.length-1].y);
         ctx.stroke();
-        break;
-      }
-      case 'eraser': {
-        if (!el.points || el.points.length < 2) break;
-        ctx.save();
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.lineWidth = el.strokeWidth * 4;
-        ctx.beginPath();
-        ctx.moveTo(el.points[0].x, el.points[0].y);
-        for (let i = 1; i < el.points.length; i++) ctx.lineTo(el.points[i].x, el.points[i].y);
-        ctx.stroke();
-        ctx.restore();
         break;
       }
       case 'line': case 'arrow': {
-        ctx.beginPath();
-        ctx.moveTo(el.x1, el.y1);
-        ctx.lineTo(el.x2, el.y2);
-        ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(el.x1, el.y1); ctx.lineTo(el.x2, el.y2); ctx.stroke();
         if (el.type === 'arrow') {
-          const angle = Math.atan2(el.y2 - el.y1, el.x2 - el.x1);
-          const headLen = 12;
-          ctx.beginPath();
+          const a = Math.atan2(el.y2 - el.y1, el.x2 - el.x1), h = 14;
+          ctx.beginPath(); ctx.moveTo(el.x2, el.y2);
+          ctx.lineTo(el.x2 - h * Math.cos(a - Math.PI / 6), el.y2 - h * Math.sin(a - Math.PI / 6));
           ctx.moveTo(el.x2, el.y2);
-          ctx.lineTo(el.x2 - headLen * Math.cos(angle - Math.PI / 6), el.y2 - headLen * Math.sin(angle - Math.PI / 6));
-          ctx.moveTo(el.x2, el.y2);
-          ctx.lineTo(el.x2 - headLen * Math.cos(angle + Math.PI / 6), el.y2 - headLen * Math.sin(angle + Math.PI / 6));
+          ctx.lineTo(el.x2 - h * Math.cos(a + Math.PI / 6), el.y2 - h * Math.sin(a + Math.PI / 6));
           ctx.stroke();
         }
         break;
@@ -126,227 +100,231 @@ const OnlineWhiteboard = () => {
       case 'rect': {
         const x = Math.min(el.x1, el.x2), y = Math.min(el.y1, el.y2);
         const w = Math.abs(el.x2 - el.x1), h = Math.abs(el.y2 - el.y1);
-        ctx.beginPath(); ctx.rect(x, y, w, h);
-        applyFill(); ctx.stroke();
+        ctx.beginPath(); ctx.rect(x, y, w, h); doFill(); ctx.stroke();
         break;
       }
       case 'ellipse': {
-        const cx = (el.x1 + el.x2) / 2, cy = (el.y1 + el.y2) / 2;
-        const rx = Math.abs(el.x2 - el.x1) / 2, ry = Math.abs(el.y2 - el.y1) / 2;
-        ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
-        applyFill(); ctx.stroke();
+        const cx = (el.x1+el.x2)/2, cy = (el.y1+el.y2)/2;
+        ctx.beginPath(); ctx.ellipse(cx, cy, Math.abs(el.x2-el.x1)/2, Math.abs(el.y2-el.y1)/2, 0, 0, Math.PI*2);
+        doFill(); ctx.stroke();
         break;
       }
       case 'diamond': {
-        const cx2 = (el.x1 + el.x2) / 2, cy2 = (el.y1 + el.y2) / 2;
-        const hw = Math.abs(el.x2 - el.x1) / 2, hh = Math.abs(el.y2 - el.y1) / 2;
-        ctx.beginPath();
-        ctx.moveTo(cx2, cy2 - hh); ctx.lineTo(cx2 + hw, cy2); ctx.lineTo(cx2, cy2 + hh); ctx.lineTo(cx2 - hw, cy2); ctx.closePath();
-        applyFill(); ctx.stroke();
+        const cx = (el.x1+el.x2)/2, cy = (el.y1+el.y2)/2;
+        const hw = Math.abs(el.x2-el.x1)/2, hh = Math.abs(el.y2-el.y1)/2;
+        ctx.beginPath(); ctx.moveTo(cx,cy-hh); ctx.lineTo(cx+hw,cy); ctx.lineTo(cx,cy+hh); ctx.lineTo(cx-hw,cy); ctx.closePath();
+        doFill(); ctx.stroke();
         break;
       }
       case 'text': {
-        ctx.font = `${el.fontSize || 16}px 'Segoe UI', sans-serif`;
+        ctx.font = `${el.fs || 18}px 'Segoe UI', sans-serif`;
         ctx.fillStyle = el.color;
         ctx.fillText(el.text || '', el.x1, el.y1);
         break;
       }
     }
-    ctx.setLineDash([]);
-    ctx.globalAlpha = 1;
+    ctx.restore();
 
-    if (selected) {
-      ctx.save();
-      ctx.strokeStyle = '#3B82F6';
-      ctx.lineWidth = 1;
-      ctx.setLineDash([4, 4]);
+    if (sel) {
+      ctx.save(); ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 1.5 / zoom; ctx.setLineDash([5/zoom, 3/zoom]);
+      let bx, by, bw, bh;
       if (el.type === 'pen' || el.type === 'eraser') {
-        const xs = el.points.map(p => p.x), ys = el.points.map(p => p.y);
-        ctx.strokeRect(Math.min(...xs) - 4, Math.min(...ys) - 4, Math.max(...xs) - Math.min(...xs) + 8, Math.max(...ys) - Math.min(...ys) + 8);
+        const xs = el.pts.map(p=>p.x), ys = el.pts.map(p=>p.y);
+        bx = Math.min(...xs)-6; by = Math.min(...ys)-6; bw = Math.max(...xs)-bx+6; bh = Math.max(...ys)-by+6;
       } else if (el.type === 'text') {
-        ctx.strokeRect(el.x1 - 4, el.y1 - (el.fontSize || 16), ctx.measureText(el.text || '').width + 8, (el.fontSize || 16) + 8);
+        ctx.font = `${el.fs||18}px 'Segoe UI',sans-serif`;
+        bx = el.x1-4; by = el.y1-(el.fs||18); bw = ctx.measureText(el.text||'').width+8; bh = (el.fs||18)+8;
       } else {
-        const x = Math.min(el.x1, el.x2) - 4, y = Math.min(el.y1, el.y2) - 4;
-        ctx.strokeRect(x, y, Math.abs(el.x2 - el.x1) + 8, Math.abs(el.y2 - el.y1) + 8);
+        bx = Math.min(el.x1,el.x2)-4; by = Math.min(el.y1,el.y2)-4;
+        bw = Math.abs(el.x2-el.x1)+8; bh = Math.abs(el.y2-el.y1)+8;
       }
+      ctx.strokeRect(bx, by, bw, bh);
+      // Resize handles
+      ctx.fillStyle = '#fff'; ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 1.5/zoom; ctx.setLineDash([]);
+      const hs = 5/zoom;
+      [[bx,by],[bx+bw,by],[bx,by+bh],[bx+bw,by+bh]].forEach(([hx,hy]) => {
+        ctx.fillRect(hx-hs/2, hy-hs/2, hs, hs);
+        ctx.strokeRect(hx-hs/2, hy-hs/2, hs, hs);
+      });
       ctx.restore();
     }
-  };
+  }, [zoom]);
+
+  const redraw = useCallback(() => {
+    const cv = canvasRef.current; if (!cv) return;
+    const ctx = cv.getContext('2d');
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, cv.width, cv.height);
+    // Dot grid
+    ctx.fillStyle = '#ddd';
+    const step = 20;
+    for (let x = pan.x % (step*zoom); x < cv.width; x += step*zoom)
+      for (let y = pan.y % (step*zoom); y < cv.height; y += step*zoom)
+        { ctx.beginPath(); ctx.arc(x, y, 0.7, 0, Math.PI*2); ctx.fill(); }
+    ctx.save(); ctx.translate(pan.x, pan.y); ctx.scale(zoom, zoom);
+    const all = curEl ? [...elements, curEl] : elements;
+    all.forEach(el => drawEl(ctx, el, el.id === selId));
+    ctx.restore();
+  }, [elements, curEl, selId, zoom, pan, drawEl]);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-    const ro = new ResizeObserver(() => { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; redraw(); });
-    ro.observe(canvas);
-    return () => ro.disconnect();
+    const cv = canvasRef.current; if (!cv) return;
+    cv.width = cv.offsetWidth; cv.height = cv.offsetHeight;
+    const ro = new ResizeObserver(() => { cv.width = cv.offsetWidth; cv.height = cv.offsetHeight; redraw(); });
+    ro.observe(cv); return () => ro.disconnect();
   }, []);
-
   useEffect(() => { redraw(); }, [redraw]);
 
-  const startDraw = (e) => {
-    e.preventDefault();
-    const pos = getPos(e);
+  // Keyboard shortcuts
+  useEffect(() => {
+    const h = (e) => {
+      if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+      const t = TOOLS.find(t2 => t2.key.toLowerCase() === e.key.toLowerCase());
+      if (t) { setTool(t.id); setSelId(null); }
+      if (e.key === 'Delete' || e.key === 'Backspace') { if (selId) { pushHistory(); setElements(p=>p.filter(el=>el.id!==selId)); setSelId(null); } }
+      if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undo(); }
+      if (e.ctrlKey && e.key === 'y') { e.preventDefault(); redo(); }
+    };
+    document.addEventListener('keydown', h); return () => document.removeEventListener('keydown', h);
+  }, [selId, elements, history]);
 
-    if (tool === 'select') {
-      const hit = [...elements].reverse().find(el => hitTest(el, pos));
-      if (hit) { setSelectedId(hit.id); setDragOffset({ x: pos.x - (hit.x1 || 0), y: pos.y - (hit.y1 || 0) }); setDrawing(true); }
-      else setSelectedId(null);
-      return;
-    }
-    if (tool === 'text') { setTextInput(pos); return; }
-
-    setDrawing(true);
-    setHistory(h => [...h, [...elements]]);
-    const el = { id: uid(), type: tool, color, strokeWidth: lineWidth, fill: fillMode, opacity: 1 };
-    if (tool === 'pen' || tool === 'eraser') { el.points = [pos]; }
-    else { el.x1 = pos.x; el.y1 = pos.y; el.x2 = pos.x; el.y2 = pos.y; }
-    setCurrentEl(el);
-  };
-
-  const onDraw = (e) => {
-    if (!drawing) return;
-    e.preventDefault();
-    const pos = getPos(e);
-
-    if (tool === 'select' && selectedId && dragOffset) {
-      setElements(prev => prev.map(el => {
-        if (el.id !== selectedId) return el;
-        const dx = pos.x - dragOffset.x - (el.x1 || 0);
-        const dy = pos.y - dragOffset.y - (el.y1 || 0);
-        if (el.type === 'pen' || el.type === 'eraser') return { ...el, points: el.points.map(p => ({ x: p.x + dx, y: p.y + dy })) };
-        return { ...el, x1: el.x1 + dx, y1: el.y1 + dy, x2: el.x2 + dx, y2: el.y2 + dy };
-      }));
-      setDragOffset({ x: pos.x - (elements.find(e2 => e2.id === selectedId)?.x1 || 0), y: pos.y - (elements.find(e2 => e2.id === selectedId)?.y1 || 0) });
-      return;
-    }
-
-    if (!currentEl) return;
-    if (tool === 'pen' || tool === 'eraser') {
-      setCurrentEl(prev => ({ ...prev, points: [...prev.points, pos] }));
-    } else {
-      setCurrentEl(prev => ({ ...prev, x2: pos.x, y2: pos.y }));
-    }
-  };
-
-  const endDraw = () => {
-    if (currentEl) { setElements(prev => [...prev, currentEl]); setCurrentEl(null); }
-    setDrawing(false); setDragOffset(null);
-  };
+  const pushHistory = () => { setHistory(h => [...h, [...elements]]); setRedoStack([]); };
+  const undo = () => { if (!history.length) return; setRedoStack(r => [...r, [...elements]]); setElements(history[history.length-1]); setHistory(h=>h.slice(0,-1)); };
+  const redo = () => { if (!redoStack.length) return; setHistory(h => [...h, [...elements]]); setElements(redoStack[redoStack.length-1]); setRedoStack(r=>r.slice(0,-1)); };
 
   const hitTest = (el, pos) => {
-    const margin = 8;
-    if (el.type === 'pen' || el.type === 'eraser') {
-      return el.points?.some(p => Math.abs(p.x - pos.x) < margin && Math.abs(p.y - pos.y) < margin);
-    }
-    if (el.type === 'text') {
-      return pos.x >= el.x1 - margin && pos.x <= el.x1 + 200 && pos.y >= el.y1 - 20 && pos.y <= el.y1 + margin;
-    }
-    const x = Math.min(el.x1, el.x2) - margin, y = Math.min(el.y1, el.y2) - margin;
-    const w = Math.abs(el.x2 - el.x1) + margin * 2, h = Math.abs(el.y2 - el.y1) + margin * 2;
-    return pos.x >= x && pos.x <= x + w && pos.y >= y && pos.y <= y + h;
+    const m = 10;
+    if (el.type === 'pen' || el.type === 'eraser') return el.pts?.some(p => Math.hypot(p.x-pos.x,p.y-pos.y) < m);
+    if (el.type === 'text') return pos.x >= el.x1-m && pos.x <= el.x1+200 && pos.y >= el.y1-20 && pos.y <= el.y1+m;
+    const x = Math.min(el.x1,el.x2)-m, y = Math.min(el.y1,el.y2)-m;
+    return pos.x >= x && pos.x <= x+Math.abs(el.x2-el.x1)+m*2 && pos.y >= y && pos.y <= y+Math.abs(el.y2-el.y1)+m*2;
   };
+
+  const start = (e) => {
+    e.preventDefault(); const pos = getPos(e);
+    if (tool === 'pan') { setPanning(true); panStart.current = { x: e.clientX - pan.x, y: e.clientY - pan.y }; return; }
+    if (tool === 'select') {
+      const hit = [...elements].reverse().find(el => hitTest(el, pos));
+      if (hit) { setSelId(hit.id); setDragOff({ x: pos.x-(hit.x1||0), y: pos.y-(hit.y1||0) }); setDrawing(true); }
+      else setSelId(null);
+      return;
+    }
+    if (tool === 'text') { setTxtIn(pos); return; }
+    setDrawing(true); pushHistory();
+    const el = { id:uid(), type:tool, color, bg:bgColor, lw, fill, dash:strokeStyle==='dashed', opacity };
+    if (tool === 'pen' || tool === 'eraser') el.pts = [pos];
+    else { el.x1 = pos.x; el.y1 = pos.y; el.x2 = pos.x; el.y2 = pos.y; }
+    setCurEl(el);
+  };
+
+  const move = (e) => {
+    if (panning) { setPan({ x: e.clientX - panStart.current.x, y: e.clientY - panStart.current.y }); return; }
+    if (!drawing) return; e.preventDefault(); const pos = getPos(e);
+    if (tool === 'select' && selId && dragOff) {
+      setElements(prev => prev.map(el => {
+        if (el.id !== selId) return el;
+        const dx = pos.x - dragOff.x - (el.x1||0), dy = pos.y - dragOff.y - (el.y1||0);
+        if (el.type==='pen'||el.type==='eraser') return {...el, pts:el.pts.map(p=>({x:p.x+dx,y:p.y+dy}))};
+        return {...el, x1:el.x1+dx, y1:el.y1+dy, x2:el.x2+dx, y2:el.y2+dy};
+      }));
+      const cur = elements.find(e2=>e2.id===selId);
+      if (cur) setDragOff({x:pos.x-(cur.x1||0),y:pos.y-(cur.y1||0)});
+      return;
+    }
+    if (!curEl) return;
+    if (tool==='pen'||tool==='eraser') setCurEl(p=>({...p,pts:[...p.pts,pos]}));
+    else setCurEl(p=>({...p,x2:pos.x,y2:pos.y}));
+  };
+
+  const end = () => { if (curEl) { setElements(p=>[...p,curEl]); setCurEl(null); } setDrawing(false); setDragOff(null); setPanning(false); };
 
   const addText = (text) => {
-    if (!text || !textInput) { setTextInput(null); return; }
-    setHistory(h => [...h, [...elements]]);
-    setElements(prev => [...prev, { id: uid(), type: 'text', x1: textInput.x, y1: textInput.y, text, color, strokeWidth: lineWidth, fontSize: 16, fill: 'none' }]);
-    setTextInput(null);
+    if (!text||!txtIn) { setTxtIn(null); return; }
+    pushHistory();
+    setElements(p=>[...p,{id:uid(),type:'text',x1:txtIn.x,y1:txtIn.y,text,color,lw,fs:18,fill:'none',opacity}]);
+    setTxtIn(null);
   };
 
-  const undo = () => { if (history.length === 0) return; setElements(history[history.length - 1]); setHistory(h => h.slice(0, -1)); };
-  const clear = () => { setHistory(h => [...h, [...elements]]); setElements([]); };
-  const deleteSelected = () => { if (!selectedId) return; setHistory(h => [...h, [...elements]]); setElements(prev => prev.filter(e2 => e2.id !== selectedId)); setSelectedId(null); };
-
-  const download = () => { const a = document.createElement('a'); a.href = canvasRef.current.toDataURL('image/png'); a.download = 'whiteboard.png'; a.click(); };
+  const download = () => { const a=document.createElement('a'); a.href=canvasRef.current.toDataURL('image/png'); a.download='whiteboard.png'; a.click(); };
+  const clear = () => { pushHistory(); setElements([]); setSelId(null); };
 
   const handleWheel = (e) => {
-    if (e.ctrlKey) { e.preventDefault(); setZoom(z => Math.max(0.25, Math.min(4, z + (e.deltaY > 0 ? -0.1 : 0.1)))); }
-    else { setPan(p => ({ x: p.x - e.deltaX, y: p.y - e.deltaY })); }
+    if (e.ctrlKey) { e.preventDefault(); setZoom(z=>Math.max(0.1,Math.min(5,z+(e.deltaY>0?-0.1:0.1)))); }
+    else setPan(p=>({x:p.x-e.deltaX,y:p.y-e.deltaY}));
   };
 
-  const getCursor = () => {
-    if (tool === 'select') return selectedId ? 'move' : 'default';
-    if (tool === 'eraser') return 'crosshair';
-    if (tool === 'text') return 'text';
-    return 'crosshair';
-  };
+  const selEl = elements.find(e2=>e2.id===selId);
 
   return (
     <ToolPageWrapper meta={meta}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 0, border: '1px solid var(--neutral-200)', borderRadius: 12, overflow: 'hidden', background: '#fff' }}>
-        {/* Top Toolbar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px', background: 'var(--neutral-50)', borderBottom: '1px solid var(--neutral-200)', flexWrap: 'wrap' }}>
-          {/* Tool buttons */}
-          {TOOLS.map(t => (
-            <button key={t} onClick={() => { setTool(t); setSelectedId(null); }} title={TOOL_LABELS[t]}
-              style={{ width: 32, height: 32, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', border: tool === t ? '2px solid var(--primary-500)' : '1px solid var(--neutral-200)', background: tool === t ? 'var(--primary-50)' : '#fff', cursor: 'pointer', fontSize: '0.688rem', fontWeight: 700, color: tool === t ? 'var(--primary-600)' : 'var(--neutral-500)' }}>
-              {t === 'select' ? '↖' : t === 'pen' ? '✏' : t === 'line' ? '—' : t === 'arrow' ? '→' : t === 'rect' ? '□' : t === 'ellipse' ? '○' : t === 'diamond' ? '◇' : t === 'text' ? 'T' : '⌫'}
+      <div style={{display:'flex',flexDirection:'column',gap:0,border:'1px solid #ddd',overflow:'hidden',background:'#fff'}}>
+        {/* Toolbar */}
+        <div style={{display:'flex',alignItems:'center',gap:4,padding:'6px 10px',background:'#f8f8f8',borderBottom:'1px solid #e5e5e5',flexWrap:'wrap',minHeight:42}}>
+          {TOOLS.map(t=>(
+            <button key={t.id} onClick={()=>{setTool(t.id);setSelId(null)}} title={`${t.label} (${t.key})`}
+              style={{width:30,height:30,display:'flex',alignItems:'center',justifyContent:'center',border:tool===t.id?'1.5px solid #6965db':'1px solid transparent',background:tool===t.id?'#ececf4':'transparent',cursor:'pointer',fontSize:'0.75rem',color:tool===t.id?'#6965db':'#666',fontWeight:600,borderRadius:6}}>
+              {t.icon}
             </button>
           ))}
-
-          <div style={{ width: 1, height: 24, background: 'var(--neutral-200)', margin: '0 4px' }} />
-
-          {/* Colors */}
-          {COLORS.map(c => (
-            <button key={c} onClick={() => setColor(c)}
-              style={{ width: 20, height: 20, borderRadius: '50%', background: c, border: color === c ? '3px solid var(--neutral-800)' : '2px solid var(--neutral-200)', cursor: 'pointer', padding: 0 }} />
+          <div style={{width:1,height:22,background:'#ddd',margin:'0 4px'}}/>
+          {COLORS.map(cl=>(
+            <button key={cl} onClick={()=>setColor(cl)}
+              style={{width:18,height:18,borderRadius:4,background:cl,border:color===cl?'2.5px solid #333':cl==='#ffffff'?'1px solid #ccc':'1.5px solid transparent',cursor:'pointer',padding:0}}/>
           ))}
-
-          <div style={{ width: 1, height: 24, background: 'var(--neutral-200)', margin: '0 4px' }} />
-
-          {/* Stroke width */}
-          {SIZES.map(s => (
-            <button key={s} onClick={() => setLineWidth(s)}
-              style={{ width: 26, height: 26, borderRadius: 4, border: lineWidth === s ? '2px solid var(--primary-500)' : '1px solid var(--neutral-200)', background: lineWidth === s ? 'var(--primary-50)' : '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <div style={{ width: s + 2, height: s + 2, borderRadius: '50%', background: '#333' }} />
+          <div style={{width:1,height:22,background:'#ddd',margin:'0 4px'}}/>
+          {SIZES.map(s=>(
+            <button key={s} onClick={()=>setLw(s)} style={{width:24,height:24,border:lw===s?'1.5px solid #6965db':'1px solid #ddd',background:lw===s?'#ececf4':'#fff',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',borderRadius:4}}>
+              <div style={{width:Math.min(s+1,8),height:Math.min(s+1,8),borderRadius:'50%',background:'#333'}}/>
             </button>
           ))}
-
-          <div style={{ width: 1, height: 24, background: 'var(--neutral-200)', margin: '0 4px' }} />
-
-          {/* Fill mode */}
-          {FILL_MODES.map(f => (
-            <button key={f} onClick={() => setFillMode(f)} title={f}
-              style={{ width: 26, height: 26, borderRadius: 4, border: fillMode === f ? '2px solid var(--primary-500)' : '1px solid var(--neutral-200)', background: fillMode === f ? 'var(--primary-50)' : '#fff', cursor: 'pointer', fontSize: '0.563rem', fontWeight: 700, color: 'var(--neutral-500)' }}>
-              {f === 'none' ? '∅' : f === 'solid' ? '■' : '▤'}
+          <div style={{width:1,height:22,background:'#ddd',margin:'0 4px'}}/>
+          {FILL.map(f=>(
+            <button key={f} onClick={()=>setFill(f)} title={f}
+              style={{width:24,height:24,border:fill===f?'1.5px solid #6965db':'1px solid #ddd',background:fill===f?'#ececf4':'#fff',cursor:'pointer',fontSize:'0.563rem',fontWeight:700,color:'#666',borderRadius:4}}>
+              {f==='none'?'∅':f==='solid'?'■':'▤'}
             </button>
           ))}
-
-          <div style={{ flex: 1 }} />
-
-          {/* Actions */}
-          <button onClick={undo} className="btn btn-ghost btn-sm" disabled={!history.length} title="Undo">Undo</button>
-          {selectedId && <button onClick={deleteSelected} className="btn btn-ghost btn-sm" style={{ color: 'var(--error)' }}>Delete</button>}
-          <button onClick={clear} className="btn btn-ghost btn-sm">Clear</button>
-          <button onClick={download} className="btn btn-ghost btn-sm"><Icon name="Download" size={14} />PNG</button>
+          {STROKE_STYLE.map(ss=>(
+            <button key={ss} onClick={()=>setStrokeStyle(ss)} title={ss}
+              style={{width:24,height:24,border:strokeStyle===ss?'1.5px solid #6965db':'1px solid #ddd',background:strokeStyle===ss?'#ececf4':'#fff',cursor:'pointer',fontSize:'0.5rem',fontWeight:700,color:'#666',borderRadius:4}}>
+              {ss==='solid'?'—':'- -'}
+            </button>
+          ))}
+          <div style={{flex:1}}/>
+          <button onClick={undo} title="Undo (Ctrl+Z)" disabled={!history.length} style={{background:'none',border:'1px solid #ddd',padding:'3px 8px',cursor:'pointer',fontSize:'0.688rem',color:'#666',borderRadius:4}}>Undo</button>
+          <button onClick={redo} title="Redo (Ctrl+Y)" disabled={!redoStack.length} style={{background:'none',border:'1px solid #ddd',padding:'3px 8px',cursor:'pointer',fontSize:'0.688rem',color:'#666',borderRadius:4}}>Redo</button>
+          {selId&&<button onClick={()=>{pushHistory();setElements(p=>p.filter(e2=>e2.id!==selId));setSelId(null)}} style={{background:'none',border:'1px solid #fca5a5',padding:'3px 8px',cursor:'pointer',fontSize:'0.688rem',color:'#dc2626',borderRadius:4}}>Delete</button>}
+          <button onClick={clear} style={{background:'none',border:'1px solid #ddd',padding:'3px 8px',cursor:'pointer',fontSize:'0.688rem',color:'#666',borderRadius:4}}>Clear</button>
+          <button onClick={download} style={{background:'none',border:'1px solid #ddd',padding:'3px 8px',cursor:'pointer',fontSize:'0.688rem',color:'#666',borderRadius:4}}><Icon name="Download" size={12}/>PNG</button>
         </div>
 
-        {/* Canvas */}
-        <div style={{ position: 'relative' }}>
+        {/* Canvas area */}
+        <div style={{position:'relative',flex:1}}>
           <canvas ref={canvasRef}
-            onMouseDown={startDraw} onMouseMove={onDraw} onMouseUp={endDraw} onMouseLeave={endDraw}
-            onTouchStart={startDraw} onTouchMove={onDraw} onTouchEnd={endDraw}
+            onMouseDown={start} onMouseMove={move} onMouseUp={end} onMouseLeave={end}
+            onTouchStart={start} onTouchMove={move} onTouchEnd={end}
             onWheel={handleWheel}
-            style={{ width: '100%', height: 560, cursor: getCursor(), touchAction: 'none', display: 'block' }} />
-
-          {textInput && (
-            <input autoFocus type="text" placeholder="Type text..."
-              style={{ position: 'absolute', left: textInput.x * zoom + pan.x, top: textInput.y * zoom + pan.y - 20, fontSize: 16, border: '1px solid var(--primary-400)', borderRadius: 4, padding: '2px 6px', background: '#fff', color: color, outline: 'none', zIndex: 10 }}
-              onKeyDown={e => { if (e.key === 'Enter') addText(e.target.value); if (e.key === 'Escape') setTextInput(null); }}
-              onBlur={e => addText(e.target.value)} />
+            style={{width:'100%',height:580,cursor:tool==='pan'?'grab':tool==='select'?(selId?'move':'default'):tool==='eraser'?'crosshair':tool==='text'?'text':'crosshair',touchAction:'none',display:'block'}}/>
+          {txtIn&&(
+            <input autoFocus type="text" placeholder="Type..."
+              style={{position:'absolute',left:txtIn.x*zoom+pan.x,top:txtIn.y*zoom+pan.y-20,fontSize:18,border:'2px solid #6965db',padding:'2px 6px',background:'#fff',color,outline:'none',zIndex:10,borderRadius:4,minWidth:120}}
+              onKeyDown={e=>{if(e.key==='Enter')addText(e.target.value);if(e.key==='Escape')setTxtIn(null)}}
+              onBlur={e=>addText(e.target.value)}/>
           )}
         </div>
 
-        {/* Bottom bar */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 12px', background: 'var(--neutral-50)', borderTop: '1px solid var(--neutral-200)', fontSize: '0.688rem', color: 'var(--neutral-400)' }}>
-          <span>{elements.length} elements</span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <button onClick={() => setZoom(z => Math.max(0.25, z - 0.25))} style={{ background: 'none', border: '1px solid var(--neutral-200)', borderRadius: 4, padding: '2px 6px', cursor: 'pointer', fontSize: '0.688rem' }}>-</button>
-            <span>{Math.round(zoom * 100)}%</span>
-            <button onClick={() => setZoom(z => Math.min(4, z + 0.25))} style={{ background: 'none', border: '1px solid var(--neutral-200)', borderRadius: 4, padding: '2px 6px', cursor: 'pointer', fontSize: '0.688rem' }}>+</button>
-            <button onClick={() => { setZoom(1); setPan({ x: 0, y: 0 }); }} style={{ background: 'none', border: '1px solid var(--neutral-200)', borderRadius: 4, padding: '2px 6px', cursor: 'pointer', fontSize: '0.688rem' }}>Reset</button>
+        {/* Status bar */}
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'5px 10px',background:'#f8f8f8',borderTop:'1px solid #e5e5e5',fontSize:'0.625rem',color:'#999'}}>
+          <div style={{display:'flex',gap:12}}>
+            <span>{elements.length} elements</span>
+            <span>{TOOLS.find(t2=>t2.id===tool)?.label}</span>
+          </div>
+          <div style={{display:'flex',alignItems:'center',gap:4}}>
+            <button onClick={()=>setZoom(z=>Math.max(0.1,z-0.25))} style={{background:'none',border:'1px solid #ddd',padding:'1px 5px',cursor:'pointer',fontSize:'0.625rem',borderRadius:3}}>−</button>
+            <span style={{minWidth:36,textAlign:'center'}}>{Math.round(zoom*100)}%</span>
+            <button onClick={()=>setZoom(z=>Math.min(5,z+0.25))} style={{background:'none',border:'1px solid #ddd',padding:'1px 5px',cursor:'pointer',fontSize:'0.625rem',borderRadius:3}}>+</button>
+            <button onClick={()=>{setZoom(1);setPan({x:0,y:0})}} style={{background:'none',border:'1px solid #ddd',padding:'1px 5px',cursor:'pointer',fontSize:'0.625rem',borderRadius:3,marginLeft:4}}>Reset</button>
           </div>
         </div>
       </div>

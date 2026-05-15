@@ -6,59 +6,125 @@ import './InvoiceGenerator.css';
 
 const defaultItems = [{ desc: 'Web Development Service', qty: 1, rate: 50000 }, { desc: 'UI/UX Design', qty: 1, rate: 25000 }];
 
-/* Each template defines: colors + a unique printCSS function that returns the full stylesheet */
-const TEMPLATES = [
-  { id:'corporate', name:'Corporate', primary:'#1B3A5C', accent:'#E8EDF2', table:'#1B3A5C' },
-  { id:'executive', name:'Executive', primary:'#2C3E50', accent:'#F8F6F0', table:'#2C3E50', gold:'#B8860B' },
-  { id:'minimal', name:'Minimal', primary:'#333333', accent:'#FAFAFA', table:'#444' },
-  { id:'modern', name:'Modern', primary:'#0066CC', accent:'#F0F6FF', table:'#0066CC' },
-  { id:'startup', name:'Startup', primary:'#E84D1A', accent:'#FFF8F5', table:'#E84D1A' },
-  { id:'legal', name:'Legal', primary:'#1A1A2E', accent:'#F5F5F5', table:'#1A1A2E' },
-  { id:'consulting', name:'Consulting', primary:'#2D5F2D', accent:'#F0F7F0', table:'#2D5F2D' },
-  { id:'finance', name:'Finance', primary:'#003366', accent:'#EDF2F7', table:'#003366', stripe:'#F7FAFC' },
-  { id:'tech', name:'Tech', primary:'#4A148C', accent:'#F3E5F5', table:'#4A148C' },
-  { id:'elegant', name:'Elegant', primary:'#1C1C1C', accent:'#FAFAF8', table:'#1C1C1C', gold:'#C5A55A' },
+const COLORS = [
+  { id:'navy', name:'Navy', primary:'#1B3A5C', table:'#1B3A5C', meta:'#EDF1F5', accent:'#1B3A5C' },
+  { id:'charcoal', name:'Charcoal', primary:'#2C2C2C', table:'#2C2C2C', meta:'#F5F5F5', accent:'#2C2C2C' },
+  { id:'forest', name:'Forest', primary:'#1E4D2B', table:'#1E4D2B', meta:'#EEF4F0', accent:'#1E4D2B' },
+  { id:'maroon', name:'Maroon', primary:'#6B1D2A', table:'#6B1D2A', meta:'#F8F0F1', accent:'#6B1D2A' },
+  { id:'steel', name:'Steel Blue', primary:'#2E5984', table:'#2E5984', meta:'#EDF3F8', accent:'#2E5984' },
+  { id:'slate', name:'Slate', primary:'#3D4F5F', table:'#3D4F5F', meta:'#F0F2F4', accent:'#3D4F5F' },
 ];
 
-const getPrintCSS = (t, template) => {
-  const isGold = t.gold;
-  const borderAccent = isGold ? t.gold : t.primary;
-  return `*{margin:0;padding:0;box-sizing:border-box}
-body{padding:0;color:#222;font-size:12px;font-family:'Segoe UI',Arial,sans-serif}
-.page{padding:40px 48px;position:relative;min-height:100vh}
-.page::before{content:'';position:absolute;top:0;left:0;width:6px;height:100%;background:${t.primary}}
-.page::after{content:'${template === 'legal' ? '' : ''}';position:absolute;bottom:40px;right:48px;font-size:72px;font-weight:900;color:${t.primary};opacity:0.03;text-transform:uppercase;letter-spacing:4px}
-.hdr{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:24px;margin-bottom:24px;border-bottom:2px solid ${t.primary}}
-.hdr-logo img{max-height:52px;margin-bottom:6px}
-.hdr-co{font-size:10px;color:#555;line-height:1.8}
-.hdr-co b{font-size:14px;color:#111;display:block;margin-bottom:2px;letter-spacing:0.3px}
-.hdr-right{text-align:right}
-.hdr-type{font-size:24px;font-weight:800;color:${t.primary};text-transform:uppercase;letter-spacing:2px}
-.hdr-num{font-size:10px;color:#888;margin-top:2px;letter-spacing:0.5px}
-.meta{display:flex;justify-content:space-between;padding:16px 20px;margin-bottom:24px;background:${t.accent};border-left:3px solid ${borderAccent}}
-.meta-g{font-size:10px;line-height:2;color:#444}
-.meta-g b{display:block;font-size:10px;color:${t.primary};text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;font-weight:700}
-table{width:100%;border-collapse:collapse;margin-bottom:24px}
-th{background:${t.table};color:#fff;padding:9px 14px;font-size:9px;text-align:left;text-transform:uppercase;letter-spacing:1px;font-weight:600}
-th:first-child{width:30px}
-td{padding:9px 14px;font-size:11px;border-bottom:1px solid #E5E5E5}
-tr:nth-child(even) td{background:${t.stripe || '#FAFAFA'}}
+/* ——— DESIGN LAYOUTS: each returns different print CSS ——— */
+const DESIGNS = [
+  { id:'classic', name:'Classic — Traditional header with serif typography' },
+  { id:'sidebar', name:'Sidebar — Left accent bar with modern layout' },
+  { id:'banner', name:'Banner — Full-width colored header band' },
+  { id:'split', name:'Split — Two-column header with divider' },
+  { id:'minimal', name:'Minimal — Clean typography, no backgrounds' },
+];
+
+const getDesignCSS = (design, c) => {
+  const base = `*{margin:0;padding:0;box-sizing:border-box}
+body{color:#222;font-size:12px}
+.page{padding:44px 48px;position:relative}
 .tr{text-align:right}
-.tots{display:flex;justify-content:flex-end}
-.tots-t{width:260px}
-.tots-r{display:flex;justify-content:space-between;padding:5px 0;font-size:11px;color:#444;border-bottom:1px solid #eee}
-.tots-r.disc{color:#C41E3A}
-.tots-r.total{font-size:15px;font-weight:800;border-top:2px solid ${t.primary};border-bottom:none;padding-top:10px;margin-top:4px;color:${t.primary}}
+table{width:100%;border-collapse:collapse;margin:24px 0}
+td{padding:9px 14px;font-size:11px;border-bottom:1px solid #E8E8E8}
+tr:nth-child(even) td{background:#FAFAFA}
+.tots{display:flex;justify-content:flex-end;margin-top:4px}
+.tots-t{width:250px}
+.tots-r{display:flex;justify-content:space-between;padding:5px 0;font-size:11px;border-bottom:1px solid #eee}
+.tots-r.disc{color:#B91C1C}
+.tots-r.total{font-size:14px;font-weight:800;border-top:2px solid ${c.primary};border-bottom:none;padding-top:10px;margin-top:4px;color:${c.primary}}
 .ftr{margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.ftr-s{padding:12px 14px;background:${t.accent};font-size:10px;color:#555;line-height:1.7;border-left:2px solid ${borderAccent}}
+.ftr-s{padding:12px 14px;font-size:10px;color:#555;line-height:1.7}
 .ftr-s b{display:block;margin-bottom:3px;color:#222;font-size:10px;text-transform:uppercase;letter-spacing:0.5px}
 .stamp{margin-top:44px;text-align:right;padding-top:44px}
 .stamp-l{border-top:1px solid #222;display:inline-block;padding-top:6px;font-size:9px;color:#555;min-width:180px;text-align:center;text-transform:uppercase;letter-spacing:1px}
-@media print{.page{padding:24px 32px}.page::before{width:4px}}`;
+@media print{.page{padding:24px 32px}}`;
+
+  switch(design) {
+    case 'classic': return base + `
+body{font-family:'Georgia','Times New Roman',serif}
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:20px;margin-bottom:20px;border-bottom:1px solid #ccc}
+.hdr-co{font-size:10px;color:#555;line-height:1.8}
+.hdr-co b{font-size:16px;color:#111;display:block;margin-bottom:4px;font-family:'Garamond','Georgia',serif;letter-spacing:0.5px}
+.hdr-type{font-size:22px;font-weight:700;color:${c.primary};text-transform:uppercase;letter-spacing:3px;font-family:'Garamond','Georgia',serif}
+.hdr-num{font-size:10px;color:#888;margin-top:4px;letter-spacing:1px}
+.meta{display:flex;justify-content:space-between;padding:14px 18px;margin-bottom:20px;background:${c.meta};border-top:1px solid #ddd;border-bottom:1px solid #ddd}
+.meta-g{font-size:10px;line-height:2;color:#444}
+.meta-g b{display:block;font-size:9px;color:${c.primary};text-transform:uppercase;letter-spacing:1.5px;margin-bottom:2px}
+th{background:${c.table};color:#fff;padding:8px 14px;font-size:9px;text-transform:uppercase;letter-spacing:1px;font-weight:600}
+.ftr-s{border-top:1px solid #ddd;padding-top:14px;background:transparent}`;
+
+    case 'sidebar': return base + `
+body{font-family:'Segoe UI',Arial,sans-serif}
+.page{padding-left:60px}
+.page::before{content:'';position:absolute;top:0;left:0;width:8px;height:100%;background:${c.primary}}
+.page::after{content:'';position:absolute;top:40px;left:20px;width:24px;height:24px;border:3px solid ${c.primary};border-radius:50%}
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:20px;margin-bottom:20px;border-bottom:2px solid ${c.primary}}
+.hdr-co{font-size:10px;color:#555;line-height:1.8}
+.hdr-co b{font-size:15px;color:#111;display:block;margin-bottom:2px;font-weight:800}
+.hdr-type{font-size:20px;font-weight:800;color:${c.primary};text-transform:uppercase;letter-spacing:2px}
+.hdr-num{font-size:10px;color:#888;margin-top:4px}
+.meta{display:flex;justify-content:space-between;padding:14px 18px;margin-bottom:20px;background:${c.meta};border-left:4px solid ${c.primary}}
+.meta-g{font-size:10px;line-height:2;color:#444}
+.meta-g b{display:block;font-size:9px;color:${c.primary};text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+th{background:${c.table};color:#fff;padding:8px 14px;font-size:9px;text-transform:uppercase;letter-spacing:1px;font-weight:600}
+.ftr-s{background:${c.meta};border-left:3px solid ${c.primary};padding-left:14px}`;
+
+    case 'banner': return base + `
+body{font-family:'Segoe UI',Arial,sans-serif}
+.hdr{background:${c.primary};color:#fff;padding:28px 32px;margin:-44px -48px 24px;display:flex;justify-content:space-between;align-items:center}
+.hdr-co{font-size:10px;color:rgba(255,255,255,0.75);line-height:1.8}
+.hdr-co b{font-size:16px;color:#fff;display:block;margin-bottom:2px;font-weight:800;letter-spacing:0.5px}
+.hdr-type{font-size:28px;font-weight:800;color:rgba(255,255,255,0.9);text-transform:uppercase;letter-spacing:4px}
+.hdr-num{font-size:10px;color:rgba(255,255,255,0.5);margin-top:4px;letter-spacing:1px}
+.meta{display:flex;justify-content:space-between;padding:14px 18px;margin-bottom:20px;border:1px solid #ddd}
+.meta-g{font-size:10px;line-height:2;color:#444}
+.meta-g b{display:block;font-size:9px;color:${c.primary};text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+th{background:${c.table};color:#fff;padding:8px 14px;font-size:9px;text-transform:uppercase;letter-spacing:1px;font-weight:600}
+.ftr-s{background:${c.meta};padding:14px}`;
+
+    case 'split': return base + `
+body{font-family:'Times New Roman','Georgia',serif}
+.hdr{display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:center;padding-bottom:24px;margin-bottom:20px}
+.hdr-div{width:2px;height:60px;background:${c.primary}}
+.hdr-co{font-size:10px;color:#555;line-height:1.8}
+.hdr-co b{font-size:15px;color:#111;display:block;margin-bottom:4px;font-family:'Garamond','Georgia',serif}
+.hdr-right{text-align:right}
+.hdr-type{font-size:18px;font-weight:700;color:${c.primary};text-transform:uppercase;letter-spacing:4px;font-family:'Garamond','Georgia',serif}
+.hdr-num{font-size:10px;color:#888;margin-top:4px;letter-spacing:1px}
+.hdr::after{content:'';display:block;grid-column:1/-1;height:1px;background:linear-gradient(90deg,transparent,${c.primary},transparent)}
+.meta{display:flex;justify-content:space-between;padding:16px 20px;margin-bottom:20px;border:1px solid ${c.primary}22;background:${c.meta}}
+.meta-g{font-size:10px;line-height:2;color:#444}
+.meta-g b{display:block;font-size:9px;color:${c.primary};text-transform:uppercase;letter-spacing:1.5px;margin-bottom:2px;font-family:'Garamond','Georgia',serif}
+th{background:${c.table};color:#fff;padding:8px 14px;font-size:9px;text-transform:uppercase;letter-spacing:1.5px;font-weight:400;font-family:'Garamond','Georgia',serif}
+.ftr-s{border-top:1px solid #ddd;padding-top:14px;background:transparent}
+.tots-r.total{font-family:'Garamond','Georgia',serif}`;
+
+    case 'minimal': return base + `
+body{font-family:'Helvetica Neue','Arial',sans-serif}
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:20px;margin-bottom:20px}
+.hdr-co{font-size:10px;color:#777;line-height:1.8}
+.hdr-co b{font-size:14px;color:#111;display:block;margin-bottom:4px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+.hdr-type{font-size:14px;font-weight:400;color:#999;text-transform:uppercase;letter-spacing:6px}
+.hdr-num{font-size:28px;font-weight:200;color:${c.primary};margin-top:2px;letter-spacing:-1px}
+.meta{display:flex;justify-content:space-between;padding:0 0 16px;margin-bottom:20px;border-bottom:1px solid #eee}
+.meta-g{font-size:10px;line-height:2;color:#666}
+.meta-g b{display:block;font-size:8px;color:#999;text-transform:uppercase;letter-spacing:2px;margin-bottom:2px}
+th{background:transparent;color:${c.primary};padding:8px 14px;font-size:8px;text-transform:uppercase;letter-spacing:2px;font-weight:600;border-bottom:2px solid ${c.primary}}
+.ftr-s{background:transparent;border-top:1px solid #eee;padding-top:14px}
+.tots-r{border:none}
+.tots-r.total{border-top:1px solid #222}`;
+    default: return base;
+  }
 };
 
 const InvoiceGenerator = () => {
-  const [tplIdx, setTplIdx] = useState(0);
+  const [colorIdx, setColorIdx] = useState(0);
+  const [designId, setDesignId] = useState('classic');
   const [logo, setLogo] = useState(null);
   const [company, setCompany] = useState({ name: 'Your Company', address: '123 Business Ave, City, State 560001', phone: '+91 98765 43210', email: 'info@company.com', gst: '', pan: '' });
   const [client, setClient] = useState({ name: 'Client Name', address: 'Client Address, City', email: 'client@email.com', phone: '' });
@@ -69,10 +135,9 @@ const InvoiceGenerator = () => {
   const [notes, setNotes] = useState('Thank you for your business!');
   const [terms, setTerms] = useState('Payment is due within 30 days of invoice date.');
   const [bankDetails, setBankDetails] = useState({ bank: '', account: '', ifsc: '' });
-  const printRef = useRef(null);
 
   const addItem = () => setItems([...items, { desc: '', qty: 1, rate: 0 }]);
-  const updateItem = (i, f, v) => { const c = [...items]; c[i] = { ...c[i], [f]: f === 'desc' ? v : +v }; setItems(c); };
+  const updateItem = (i, f, v) => { const c2 = [...items]; c2[i] = { ...c2[i], [f]: f === 'desc' ? v : +v }; setItems(c2); };
   const removeItem = i => setItems(items.filter((_, x) => x !== i));
 
   const subtotal = items.reduce((s, it) => s + it.qty * it.rate, 0);
@@ -82,19 +147,21 @@ const InvoiceGenerator = () => {
   const total = taxable + tax;
   const fmt = n => '\u20B9' + n.toLocaleString('en-IN', { minimumFractionDigits: 2 });
 
-  const t = TEMPLATES[tplIdx];
+  const c = COLORS[colorIdx];
   const handleLogo = e => { const f = e.target.files[0]; if (f) { const r = new FileReader(); r.onload = ev => setLogo(ev.target.result); r.readAsDataURL(f); } };
 
-  const buildHTML = () => `<div class="page">
-<div class="hdr"><div>${logo ? `<div class="hdr-logo"><img src="${logo}" alt="Logo"></div>` : ''}
-<div class="hdr-co"><b>${company.name}</b>${company.address}<br>
-${company.phone ? 'Tel: ' + company.phone + '<br>' : ''}${company.email ? company.email + '<br>' : ''}
-${company.gst ? 'GSTIN: ' + company.gst + '<br>' : ''}${company.pan ? 'PAN: ' + company.pan : ''}</div></div>
-<div class="hdr-right"><div class="hdr-type">${inv.type}</div><div class="hdr-num">#${inv.number}</div></div></div>
-<div class="meta"><div class="meta-g"><b>Bill To</b>${client.name}<br>${client.address}<br>
-${client.email ? client.email + '<br>' : ''}${client.phone ? 'Tel: ' + client.phone : ''}</div>
-<div class="meta-g" style="text-align:right"><b>Details</b>Date: ${inv.date}<br>
-${inv.due ? 'Due: ' + inv.due + '<br>' : ''}Status: <span style="color:#B8860B;font-weight:700">Pending</span></div></div>
+  const headerHTML = () => {
+    const logoHtml = logo ? `<div style="margin-bottom:6px"><img src="${logo}" style="max-height:48px" alt="Logo"></div>` : '';
+    const coHtml = `${logoHtml}<div class="hdr-co"><b>${company.name}</b>${company.address}<br>${company.phone ? 'Tel: ' + company.phone + '<br>' : ''}${company.email || ''}${company.gst ? '<br>GSTIN: ' + company.gst : ''}${company.pan ? '<br>PAN: ' + company.pan : ''}</div>`;
+    const typeHtml = `<div class="hdr-type">${inv.type}</div><div class="hdr-num">#${inv.number}</div>`;
+    if (designId === 'split') return `<div class="hdr"><div>${coHtml}</div><div class="hdr-div"></div><div class="hdr-right">${typeHtml}</div></div>`;
+    if (designId === 'minimal') return `<div class="hdr"><div>${coHtml}</div><div style="text-align:right">${typeHtml}</div></div>`;
+    return `<div class="hdr"><div>${coHtml}</div><div style="text-align:right">${typeHtml}</div></div>`;
+  };
+
+  const buildHTML = () => `<div class="page">${headerHTML()}
+<div class="meta"><div class="meta-g"><b>Bill To</b>${client.name}<br>${client.address}${client.email ? '<br>' + client.email : ''}${client.phone ? '<br>Tel: ' + client.phone : ''}</div>
+<div class="meta-g" style="text-align:right"><b>Details</b>Date: ${inv.date}${inv.due ? '<br>Due: ' + inv.due : ''}<br>Status: <span style="color:#B8860B;font-weight:700">Pending</span></div></div>
 <table><thead><tr><th>#</th><th>Description</th><th class="tr">Qty</th><th class="tr">Rate</th><th class="tr">Amount</th></tr></thead>
 <tbody>${items.map((it, i) => `<tr><td>${i + 1}</td><td>${it.desc || '\u2014'}</td><td class="tr">${it.qty}</td><td class="tr">${fmt(it.rate)}</td><td class="tr" style="font-weight:600">${fmt(it.qty * it.rate)}</td></tr>`).join('')}</tbody></table>
 <div class="tots"><div class="tots-t">
@@ -102,13 +169,13 @@ ${inv.due ? 'Due: ' + inv.due + '<br>' : ''}Status: <span style="color:#B8860B;f
 ${discount > 0 ? `<div class="tots-r disc"><span>Discount (${discount}%)</span><span>-${fmt(discountAmt)}</span></div>` : ''}
 <div class="tots-r"><span>Tax (${taxRate}%)</span><span>${fmt(tax)}</span></div>
 <div class="tots-r total"><span>Total</span><span>${fmt(total)}</span></div></div></div>
-<div class="ftr">${notes || terms ? `<div class="ftr-s">${notes ? '<b>Notes</b>' + notes + '<br><br>' : ''}${terms ? '<b>Terms &amp; Conditions</b>' + terms : ''}</div>` : ''}
+<div class="ftr">${notes || terms ? `<div class="ftr-s">${notes ? '<b>Notes</b>' + notes + '<br><br>' : ''}${terms ? '<b>Terms</b>' + terms : ''}</div>` : ''}
 ${bankDetails.bank ? `<div class="ftr-s"><b>Bank Details</b>Bank: ${bankDetails.bank}<br>A/C: ${bankDetails.account}<br>IFSC: ${bankDetails.ifsc}</div>` : ''}</div>
 <div class="stamp"><div class="stamp-l">Authorized Signatory</div></div></div>`;
 
   const print = () => {
     const win = window.open('', '_blank');
-    win.document.write(`<html><head><title>${inv.type} ${inv.number}</title><style>${getPrintCSS(t, t.id)}</style></head><body>${buildHTML()}</body></html>`);
+    win.document.write(`<html><head><title>${inv.type} ${inv.number}</title><style>${getDesignCSS(designId, c)}</style></head><body>${buildHTML()}</body></html>`);
     win.document.close();
     setTimeout(() => { win.print(); win.close(); }, 600);
   };
@@ -117,13 +184,18 @@ ${bankDetails.bank ? `<div class="ftr-s"><b>Bank Details</b>Bank: ${bankDetails.
     <ToolPageWrapper meta={meta}>
       <div className="invoice-tool">
         <div className="invoice-controls">
-          <h3 className="inv-section-title">Settings</h3>
-          <div className="form-group"><label>Template</label>
+          <h3 className="inv-section-title">Design &amp; Style</h3>
+          <div className="form-group"><label>Design Layout</label>
+            <select value={designId} onChange={e => setDesignId(e.target.value)} className="qr-select">
+              {DESIGNS.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
+            </select>
+          </div>
+          <div className="form-group"><label>Color Scheme</label>
             <div className="inv-template-grid">
-              {TEMPLATES.map((tp, i) => (
-                <button key={tp.id} className={`inv-template-btn ${tplIdx === i ? 'active' : ''}`} onClick={() => setTplIdx(i)} style={{ borderColor: tplIdx === i ? tp.primary : undefined }}>
-                  <div className="inv-template-preview" style={{ background: tp.primary }} />
-                  <span>{tp.name}</span>
+              {COLORS.map((cl, i) => (
+                <button key={cl.id} className={`inv-template-btn ${colorIdx === i ? 'active' : ''}`} onClick={() => setColorIdx(i)} style={{ borderColor: colorIdx === i ? cl.primary : undefined }}>
+                  <div className="inv-template-preview" style={{ background: cl.primary }} />
+                  <span>{cl.name}</span>
                 </button>
               ))}
             </div>
@@ -157,54 +229,18 @@ ${bankDetails.bank ? `<div class="ftr-s"><b>Bank Details</b>Bank: ${bankDetails.
           <hr />
           <h4 className="inv-section-title">Bank Details (optional)</h4>
           <div className="form-group"><label>Bank Name</label><input value={bankDetails.bank} onChange={e => setBankDetails({ ...bankDetails, bank: e.target.value })} className="calc-input" /></div>
-          <div className="form-group"><label>Account Number</label><input value={bankDetails.account} onChange={e => setBankDetails({ ...bankDetails, account: e.target.value })} className="calc-input" /></div>
-          <div className="form-group"><label>IFSC Code</label><input value={bankDetails.ifsc} onChange={e => setBankDetails({ ...bankDetails, ifsc: e.target.value })} className="calc-input" /></div>
+          <div className="form-group"><label>Account No</label><input value={bankDetails.account} onChange={e => setBankDetails({ ...bankDetails, account: e.target.value })} className="calc-input" /></div>
+          <div className="form-group"><label>IFSC</label><input value={bankDetails.ifsc} onChange={e => setBankDetails({ ...bankDetails, ifsc: e.target.value })} className="calc-input" /></div>
           <hr />
           <div className="form-group"><label>Notes</label><textarea value={notes} onChange={e => setNotes(e.target.value)} className="devtool-textarea" rows={2} /></div>
           <div className="form-group"><label>Terms</label><textarea value={terms} onChange={e => setTerms(e.target.value)} className="devtool-textarea" rows={2} /></div>
           <button onClick={print} className="btn btn-primary btn-lg" style={{ width: '100%', marginTop: 8 }}><Icon name="Download" size={18} />Download / Print PDF</button>
         </div>
 
-        {/* LIVE PREVIEW */}
-        <div className="invoice-preview" ref={printRef} style={{ borderLeft: `5px solid ${t.primary}` }}>
-          <div className="inv-header" style={{ borderBottom: `2px solid ${t.primary}` }}>
-            <div>
-              {logo && <div className="inv-logo"><img src={logo} alt="Logo" /></div>}
-              <div className="inv-company"><strong>{company.name}</strong>{company.address}<br />
-                {company.phone && <>Tel: {company.phone}<br /></>}
-                {company.email && <>{company.email}<br /></>}
-                {company.gst && <>GSTIN: {company.gst}<br /></>}
-                {company.pan && <>PAN: {company.pan}</>}
-              </div>
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <div className="inv-title" style={{ color: t.primary }}>{inv.type}</div>
-              <div className="inv-title-sub">#{inv.number}</div>
-            </div>
-          </div>
-
-          <div className="inv-meta" style={{ background: t.accent, borderLeft: `3px solid ${t.gold || t.primary}` }}>
-            <div className="inv-meta-group"><strong style={{ color: t.primary }}>Bill To</strong>{client.name}<br />{client.address}<br />{client.email && <>{client.email}<br /></>}{client.phone && <>Tel: {client.phone}</>}</div>
-            <div className="inv-meta-group" style={{ textAlign: 'right' }}><strong style={{ color: t.primary }}>Details</strong>Date: {inv.date}<br />{inv.due && <>Due: {inv.due}<br /></>}Status: <span style={{ color: '#B8860B', fontWeight: 700 }}>Pending</span></div>
-          </div>
-
-          <table>
-            <thead><tr><th style={{ background: t.table, width: 30 }}>#</th><th style={{ background: t.table }}>Description</th><th className="text-right" style={{ background: t.table }}>Qty</th><th className="text-right" style={{ background: t.table }}>Rate</th><th className="text-right" style={{ background: t.table }}>Amount</th></tr></thead>
-            <tbody>{items.map((it, i) => <tr key={i}><td>{i + 1}</td><td>{it.desc || '\u2014'}</td><td className="text-right">{it.qty}</td><td className="text-right">{fmt(it.rate)}</td><td className="text-right" style={{ fontWeight: 600 }}>{fmt(it.qty * it.rate)}</td></tr>)}</tbody>
-          </table>
-
-          <div className="inv-totals"><div className="inv-totals-table">
-            <div className="inv-totals-row"><span>Subtotal</span><span>{fmt(subtotal)}</span></div>
-            {discount > 0 && <div className="inv-totals-row discount"><span>Discount ({discount}%)</span><span>-{fmt(discountAmt)}</span></div>}
-            <div className="inv-totals-row"><span>Tax ({taxRate}%)</span><span>{fmt(tax)}</span></div>
-            <div className="inv-totals-row total" style={{ borderTopColor: t.primary, color: t.primary }}><span>Total</span><span>{fmt(total)}</span></div>
-          </div></div>
-
-          <div className="inv-footer">
-            {(notes || terms) && <div className="inv-footer-section" style={{ background: t.accent, borderLeft: `2px solid ${t.gold || t.primary}` }}>{notes && <><strong>Notes</strong>{notes}<br /><br /></>}{terms && <><strong>Terms &amp; Conditions</strong>{terms}</>}</div>}
-            {bankDetails.bank && <div className="inv-footer-section" style={{ background: t.accent, borderLeft: `2px solid ${t.gold || t.primary}` }}><strong>Bank Details</strong>Bank: {bankDetails.bank}<br />A/C: {bankDetails.account}<br />IFSC: {bankDetails.ifsc}</div>}
-          </div>
-          <div className="inv-stamp"><div className="inv-stamp-line">Authorized Signatory</div></div>
+        {/* LIVE PREVIEW via iframe */}
+        <div className="invoice-preview-wrap">
+          <iframe srcDoc={`<html><head><style>${getDesignCSS(designId, c)}</style></head><body>${buildHTML()}</body></html>`}
+            style={{ width: '100%', minHeight: 700, border: 'none' }} title="Invoice Preview" />
         </div>
       </div>
     </ToolPageWrapper>

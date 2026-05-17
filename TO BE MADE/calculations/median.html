@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Median Calculation</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      padding: 20px; 
+      background: #fff; 
+      margin: 0;
+    }
+    h3 { color: #1976d2; margin-top: 0; }
+    .column-list { 
+      max-height: 200px; 
+      overflow-y: auto; 
+      border: 1px solid #ddd; 
+      padding: 10px; 
+      margin: 10px 0; 
+      background: #f9f9f9;
+    }
+    .column-list label { 
+      display: block; 
+      margin-bottom: 8px; 
+      cursor: pointer;
+      padding: 4px;
+    }
+    .column-list label:hover {
+      background: #e3f2fd;
+    }
+    .actions { 
+      margin-top: 20px;
+      padding: 10px 0;
+      border-top: 1px solid #eee;
+    }
+    button { 
+      padding: 10px 20px; 
+      margin-right: 10px; 
+      cursor: pointer;
+      border: 1px solid #ccc;
+      background: #fff;
+      border-radius: 4px;
+    }
+    button[type="submit"] {
+      background: #4caf50;
+      color: white;
+      border-color: #4caf50;
+    }
+    button[type="submit"]:hover {
+      background: #45a049;
+    }
+    .error { 
+      color: #d32f2f; 
+      margin-top: 10px;
+      padding: 8px;
+      background: #ffebee;
+      border-radius: 4px;
+      display: none;
+    }
+    .popup-close { position: absolute; top: 12px; right: 16px; font-size: 20px; color: #555; cursor: pointer;}
+    .popup-close:hover { color: #000;}
+  </style>
+</head>
+
+<body>
+  <h3>Calculate Median</h3>
+  <p>Select one or more numeric columns to calculate their median values:</p>
+  
+  <form id="medianForm">
+    <div class="column-list" id="columnList">
+      <!-- Columns will be loaded here -->
+    </div>
+    <div class="actions">
+      <button type="submit">Calculate Median</button>
+      <button type="button" onclick="closePopup()">Cancel</button>
+    </div>
+    <div class="error" id="errorMsg"></div>
+  </form>
+
+
+  <script>
+    // Close popup function
+    function closePopup() {
+      try {
+        parent.closeModal();
+      } catch(e) {
+        console.log('Could not close via parent, trying window.close');
+        window.close();
+      }
+    }
+
+    // Get columns from URL parameters
+    function loadColumns() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const headersParam = urlParams.get('headers');
+        
+        if (headersParam) {
+          const headers = JSON.parse(decodeURIComponent(headersParam));
+          const columnList = document.getElementById('columnList');
+          
+          if(headers && headers.length > 0) {
+            columnList.innerHTML = headers.map((header, index) => 
+              `<label>
+                <input type="checkbox" name="column" value="${index}"> 
+                Column ${String.fromCharCode(65 + index)}: ${header}
+              </label>`
+            ).join('');
+          } else {
+            columnList.innerHTML = '<p>No columns found. Please add data to the grid first.</p>';
+          }
+        } else {
+          document.getElementById('columnList').innerHTML = '<p>No column data received. Please try again.</p>';
+        }
+      } catch(error) {
+        console.error('Error loading columns:', error);
+        document.getElementById('columnList').innerHTML = '<p>Error loading columns. Please try again.</p>';
+      }
+    }
+
+    // Form submission handler
+    document.getElementById('medianForm').onsubmit = function(e) {
+      e.preventDefault();
+      
+      const selectedColumns = Array.from(
+        document.querySelectorAll('input[name="column"]:checked')
+      ).map(input => parseInt(input.value));
+
+      const errorMsg = document.getElementById('errorMsg');
+      
+      if(selectedColumns.length === 0) {
+        errorMsg.textContent = "Please select at least one column.";
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      errorMsg.style.display = 'none';
+      
+      try {
+        // Call parent function to run calculation
+        if(parent.runCalculation) {
+          parent.runCalculation('median', selectedColumns);
+        } else {
+          throw new Error('Unable to access parent calculation function');
+        }
+      } catch(error) {
+        console.error('Error running calculation:', error);
+        errorMsg.textContent = "Error running calculation. Please try again.";
+        errorMsg.style.display = 'block';
+      }
+    };
+
+    // Load columns when page loads
+    window.onload = loadColumns;
+  </script>
+  <div class="popup-close" onclick="closePopup()">✕</div>
+</script>
+</body>
+</html>
+
+
+
+
+
+
+

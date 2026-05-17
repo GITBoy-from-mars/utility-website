@@ -391,6 +391,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://utility-website-9xn.pages.dev/tools/payslip-generator</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://utility-website-9xn.pages.dev/tools/pdf-compressor</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>monthly</changefreq>
@@ -565,6 +571,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://utility-website-9xn.pages.dev/tools/spss-numeric-converter</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://utility-website-9xn.pages.dev/tools/sql-formatter</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>monthly</changefreq>
@@ -578,6 +590,12 @@
   </url>
   <url>
     <loc>https://utility-website-9xn.pages.dev/tools/ssl-certificate-checker</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://utility-website-9xn.pages.dev/tools/statistics-calculator</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

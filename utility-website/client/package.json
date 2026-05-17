@@ -12,11 +12,13 @@
   "dependencies": {
     "html2canvas": "^1.4.1",
     "marked": "^12.0.0",
+    "pdfmake": "^0.3.8",
     "qrcode": "^1.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
-    "react-router-dom": "^6.26.0"
+    "react-router-dom": "^6.26.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

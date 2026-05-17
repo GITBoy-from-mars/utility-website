@@ -15,11 +15,14 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false,
+    chunkSizeWarningLimit: 1100,
     rollupOptions: {
       output: {
         manualChunks: {
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-helmet': ['react-helmet-async'],
+          'vendor-xlsx': ['xlsx'],
+          'vendor-pdfmake': ['pdfmake'],
         },
       },
     },

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payslip Generator (India)</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <!-- pdfmake (client-side PDF generator) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <h1>Free Payslip Generator (India)</h1>
+    <p class="subtitle">Multi-step form + perfect PDF output for Indian payslips</p>
+  </header>
+
+  <main>
+    <div class="stepper">
+      <div class="step active" data-step="1"><span>1</span><label>Company</label></div>
+      <div class="step" data-step="2"><span>2</span><label>Employee</label></div>
+      <div class="step" data-step="3"><span>3</span><label>Pay & Items</label></div>
+      <div class="step" data-step="4"><span>4</span><label>Preview & PDF</label></div>
+    </div>
+
+    <form id="payslipForm">
+      <!-- STEP 1: Company -->
+      <section class="panel" data-step="1">
+        <h2>Company Details</h2>
+        <div class="grid two">
+          <div class="field">
+            <label for="companyName">Company Name *</label>
+            <input id="companyName" name="companyName" placeholder="e.g., Acme Pvt Ltd" required/>
+          </div>
+          <div class="field">
+            <label for="country">Country</label>
+            <input id="country" name="country" value="India" placeholder="India"/>
+            <small>Template is specific to India — leave as “India” or blank.</small>
+          </div>
+        </div>
+
+        <div class="grid three">
+          <div class="field">
+            <label for="addrLine1">Address line 1</label>
+            <input id="addrLine1" name="addrLine1" placeholder="Street / Building"/>
+          </div>
+          <div class="field">
+            <label for="addrLine2">Address line 2</label>
+            <input id="addrLine2" name="addrLine2" placeholder="Area / Landmark"/>
+          </div>
+          <div class="field">
+            <label for="city">City</label>
+            <input id="city" name="city" placeholder="City"/>
+          </div>
+        </div>
+
+        <div class="grid three">
+          <div class="field">
+            <label for="state">State</label>
+            <input id="state" name="state" placeholder="State"/>
+          </div>
+          <div class="field">
+            <label for="pincode">PIN code</label>
+            <input id="pincode" name="pincode" placeholder="110001" pattern="\d{4,10}"/>
+          </div>
+          <div class="field">
+            <label for="companyEmail">Company email</label>
+            <input id="companyEmail" name="companyEmail" type="email" placeholder="hr@company.com"/>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <div class="field">
+            <label for="logo">Upload Logo</label>
+            <input id="logo" name="logo" type="file" accept=".bmp,.png,.gif,.jpg,.jpeg,image/*"/>
+            <small>Recommended 240×240 @ 72DPI, up to 1MB. Supported: BMP, PNG, GIF, JPG, JPEG.</small>
+          </div>
+          <div class="preview">
+            <div class="logo-preview" id="logoPreview">No logo uploaded</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2: Employee -->
+      <section class="panel" data-step="2" hidden>
+        <h2>Employee Details</h2>
+        <div class="grid three">
+          <div class="field">
+            <label for="employeeName">Employee Name *</label>
+            <input id="employeeName" name="employeeName" required placeholder="e.g., Ritesh"/>
+          </div>
+          <div class="field">
+            <label for="employeeId">Employee ID</label>
+            <input id="employeeId" name="employeeId" placeholder="e.g., EMP001"/>
+          </div>
+          <div class="field">
+            <label for="designation">Designation</label>
+            <input id="designation" name="designation" placeholder="e.g., Software Engineer"/>
+          </div>
+        </div>
+
+        <div class="grid three">
+          <div class="field">
+            <label for="pan">PAN</label>
+            <input id="pan" name="pan" placeholder="ABCDE1234F"/>
+          </div>
+          <div class="field">
+            <label for="uan">UAN</label>
+            <input id="uan" name="uan" placeholder="12-digit UAN"/>
+          </div>
+          <div class="field">
+            <label for="bankAccount">Bank A/C No.</label>
+            <input id="bankAccount" name="bankAccount" placeholder="###########"/>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 3: Pay & Items -->
+      <section class="panel" data-step="3" hidden>
+        <h2>Pay Period & Income Details</h2>
+        <div class="grid three">
+          <div class="field">
+            <label for="payMonth">Pay Period — Month *</label>
+            <select id="payMonth" name="payMonth" required>
+              <option value="">Select Month</option>
+              <option>January</option><option>February</option><option>March</option>
+              <option>April</option><option>May</option><option>June</option>
+              <option>July</option><option>August</option><option>September</option>
+              <option>October</option><option>November</option><option>December</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="payYear">Pay Period — Year *</label>
+            <input id="payYear" name="payYear" type="number" min="1900" max="2100" required placeholder="2025"/>
+          </div>
+          <div class="field">
+            <label for="payDate">Pay Date *</label>
+            <input id="payDate" name="payDate" type="date" required/>
+          </div>
+        </div>
+
+        <div class="grid three">
+          <div class="field">
+            <label for="totalDays">Days in Month</label>
+            <input id="totalDays" name="totalDays" type="number" readonly/>
+          </div>
+          <div class="field">
+            <label for="lopDays">Loss of Pay (LOP) Days</label>
+            <input id="lopDays" name="lopDays" type="number" min="0" value="0"/>
+            <small>(Paid Days + LOP Days) must be ≤ Days in Month.</small>
+          </div>
+          <div class="field">
+            <label for="paidDays">Paid Days</label>
+            <input id="paidDays" name="paidDays" type="number" min="0"/>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <div class="field">
+            <label>Earnings</label>
+            <table class="items" id="earningsTable">
+              <thead><tr><th>Description</th><th class="amt">Amount (₹)</th><th></th></tr></thead>
+              <tbody></tbody>
+              <tfoot><tr><td class="right bold">Gross Earnings</td><td class="amt" id="grossEarnings">0.00</td><td></td></tr></tfoot>
+            </table>
+            <button type="button" class="ghost" id="addEarning">+ Add Earning</button>
+          </div>
+
+          <div class="field">
+            <label>Deductions</label>
+            <table class="items" id="deductionsTable">
+              <thead><tr><th>Description</th><th class="amt">Amount (₹)</th><th></th></tr></thead>
+              <tbody></tbody>
+              <tfoot><tr><td class="right bold">Total Deductions</td><td class="amt" id="totalDeductions">0.00</td><td></td></tr></tfoot>
+            </table>
+            <button type="button" class="ghost" id="addDeduction">+ Add Deduction</button>
+          </div>
+        </div>
+
+        <div class="totals">
+          <div class="total-row">
+            <span>Total Net Payable (Gross − Deductions)</span>
+            <strong id="netPay">₹ 0.00</strong>
+          </div>
+          <div class="total-row small">
+            <span>Amount in words</span>
+            <em id="amountInWords">—</em>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 4: Preview & PDF -->
+      <section class="panel" data-step="4" hidden>
+        <h2>Preview & Generate</h2>
+        <p>Click “Generate Payslip PDF” to download a perfectly formatted payslip.</p>
+        <div class="actions">
+          <button type="button" id="generateBtn" class="primary">Generate Payslip PDF</button>
+          <button type="reset" class="ghost" id="resetBtn">Reset Form</button>
+        </div>
+        <div id="validationErrors" class="errors" hidden></div>
+      </section>
+
+      <div class="nav">
+        <button type="button" id="prevBtn" class="ghost" disabled>← Back</button>
+        <button type="button" id="nextBtn" class="primary">Next →</button>
+      </div>
+    </form>
+  </main>
+
+  <footer class="app-footer">
+    <small>© Simbi Labs India — This is a system-generated document.</small>
+  </footer>
+
+  <script src="utils.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

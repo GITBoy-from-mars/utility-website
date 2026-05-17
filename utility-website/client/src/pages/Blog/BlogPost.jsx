@@ -1,16 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { getPostBySlug, getPostsByCategory, getRecentPosts, getAllCategories } from '../../blog/_registry';
 import siteConfig from '../../config/siteConfig';
 import './Blog.css';
 
+const API = import.meta.env.VITE_API_URL || '';
+
 const BlogPost = () => {
   const { category, slug } = useParams();
   const post = getPostBySlug(category, slug);
   const [commentName, setCommentName] = useState('');
+  const [commentEmail, setCommentEmail] = useState('');
   const [commentText, setCommentText] = useState('');
   const [comments, setComments] = useState([]);
+  const [posting, setPosting] = useState(false);
+
+  // Load comments from server
+  useEffect(() => {
+    if (!category || !slug) return;
+    fetch(`${API}/api/blog-comments/${category}/${slug}`)
+      .then(r => r.json())
+      .then(d => { if (d.success) setComments(d.comments); })
+      .catch(() => {});
+  }, [category, slug]);
 
   if (!post) return (
     <div className="blog-page container-lg" style={{ textAlign: 'center', padding: '80px 0' }}>
@@ -24,11 +37,20 @@ const BlogPost = () => {
   const recentPosts = getRecentPosts(5).filter(p => p.slug !== slug).slice(0, 4);
   const categories = getAllCategories();
 
-  const addComment = (e) => {
+  const addComment = async (e) => {
     e.preventDefault();
-    if (!commentName.trim() || !commentText.trim()) return;
-    setComments(prev => [...prev, { name: commentName, text: commentText, date: new Date().toISOString() }]);
-    setCommentName(''); setCommentText('');
+    if (!commentName.trim() || !commentEmail.trim() || !commentText.trim()) return;
+    setPosting(true);
+    try {
+      const res = await fetch(`${API}/api/blog-comments/${category}/${slug}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: commentName, email: commentEmail, text: commentText }),
+      });
+      const data = await res.json();
+      if (data.success) { setComments(prev => [...prev, data.comment]); setCommentName(''); setCommentEmail(''); setCommentText(''); }
+    } catch { /* silently fail */ }
+    setPosting(false);
   };
 
   return (
@@ -49,12 +71,10 @@ const BlogPost = () => {
       <div className="blog-page container-lg">
         <div className="blog-layout">
           <article className="blog-article">
-            {/* Breadcrumb */}
             <nav className="blog-breadcrumb">
               <Link to="/">Home</Link> / <Link to="/blog">Blog</Link> / <Link to={`/blog?cat=${post.category}`}>{post.categoryName}</Link> / <span>{post.title}</span>
             </nav>
 
-            {/* Header */}
             <header className="blog-article-header">
               <span className="blog-badge">{post.categoryName}</span>
               <h1 className="blog-article-title">{post.title}</h1>
@@ -67,17 +87,14 @@ const BlogPost = () => {
 
             {post.image && <img src={post.image} alt={post.title} className="blog-article-img" />}
 
-            {/* Content */}
             <div className="blog-article-content" dangerouslySetInnerHTML={{ __html: post.content }} />
 
-            {/* Tags */}
             {post.tags.length > 0 && (
               <div className="blog-tags">
                 {post.tags.map(tag => <span key={tag} className="blog-tag">{tag}</span>)}
               </div>
             )}
 
-            {/* Related Posts */}
             {relatedPosts.length > 0 && (
               <div className="blog-related">
                 <h3 className="blog-related-title">Related Posts in {post.categoryName}</h3>
@@ -95,22 +112,28 @@ const BlogPost = () => {
             {/* Comments */}
             <div className="blog-comments">
               <h3 className="blog-comments-title">Comments ({comments.length})</h3>
-              {comments.map((c, i) => (
-                <div key={i} className="blog-comment">
+              {comments.map((c) => (
+                <div key={c.id || c.date} className="blog-comment">
                   <div className="blog-comment-avatar">{c.name.charAt(0).toUpperCase()}</div>
-                  <div><strong>{c.name}</strong><time>{new Date(c.date).toLocaleDateString()}</time><p>{c.text}</p></div>
+                  <div>
+                    <strong>{c.name}</strong>
+                    <time>{new Date(c.date).toLocaleDateString()}</time>
+                    <p>{c.text}</p>
+                  </div>
                 </div>
               ))}
               <form onSubmit={addComment} className="blog-comment-form">
                 <h4>Leave a Comment</h4>
-                <input value={commentName} onChange={e => setCommentName(e.target.value)} placeholder="Your name" required className="blog-comment-input" />
+                <div style={{ display: 'flex', gap: 10 }}>
+                  <input value={commentName} onChange={e => setCommentName(e.target.value)} placeholder="Your name *" required className="blog-comment-input" style={{ flex: 1 }} />
+                  <input value={commentEmail} onChange={e => setCommentEmail(e.target.value)} placeholder="Your email *" type="email" required className="blog-comment-input" style={{ flex: 1 }} />
+                </div>
                 <textarea value={commentText} onChange={e => setCommentText(e.target.value)} placeholder="Write your comment..." required rows={3} className="blog-comment-input" />
-                <button type="submit" className="btn btn-primary">Post Comment</button>
+                <button type="submit" className="btn btn-primary" disabled={posting}>{posting ? 'Posting...' : 'Post Comment'}</button>
               </form>
             </div>
           </article>
 
-          {/* Sidebar */}
           <aside className="blog-sidebar">
             <div className="blog-sidebar-section">
               <h3 className="blog-sidebar-title">Categories</h3>

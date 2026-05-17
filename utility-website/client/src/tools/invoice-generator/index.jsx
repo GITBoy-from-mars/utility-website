@@ -17,11 +17,14 @@ const COLORS = [
 
 /* ——— DESIGN LAYOUTS: each returns different print CSS ——— */
 const DESIGNS = [
-  { id:'classic', name:'Classic — Traditional header with serif typography' },
-  { id:'sidebar', name:'Sidebar — Left accent bar with modern layout' },
+  { id:'classic', name:'Classic — Serif typography, traditional borders' },
+  { id:'sidebar', name:'Sidebar — Left accent bar, modern layout' },
   { id:'banner', name:'Banner — Full-width colored header band' },
   { id:'split', name:'Split — Two-column header with divider' },
-  { id:'minimal', name:'Minimal — Clean typography, no backgrounds' },
+  { id:'minimal', name:'Minimal — Ultra-clean, no backgrounds' },
+  { id:'letterhead', name:'Letterhead — Decorative top band, elegant' },
+  { id:'lined', name:'Lined — Clean alternating rows, open style' },
+  { id:'premium', name:'Premium — Gold accents, executive serif' },
 ];
 
 const getDesignCSS = (design, c) => {
@@ -118,6 +121,57 @@ th{background:transparent;color:${c.primary};padding:8px 14px;font-size:8px;text
 .ftr-s{background:transparent;border-top:1px solid #eee;padding-top:14px}
 .tots-r{border:none}
 .tots-r.total{border-top:1px solid #222}`;
+
+    case 'letterhead': return base + `
+body{font-family:'Cambria','Georgia',serif}
+.page::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,${c.primary},${c.primary}88,${c.primary})}
+.page::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:${c.primary}44}
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;padding:16px 0 20px;margin-bottom:20px;border-bottom:1px solid #ddd}
+.hdr-co{font-size:10px;color:#555;line-height:1.8}
+.hdr-co b{font-size:16px;color:${c.primary};display:block;margin-bottom:4px;font-family:'Garamond','Georgia',serif;letter-spacing:1px}
+.hdr-type{font-size:20px;font-weight:700;color:${c.primary};text-transform:uppercase;letter-spacing:3px;font-family:'Garamond','Georgia',serif}
+.hdr-num{font-size:10px;color:#999;margin-top:4px;letter-spacing:1px}
+.meta{display:flex;justify-content:space-between;padding:14px 18px;margin-bottom:20px;background:${c.primary}08;border:1px solid ${c.primary}15}
+.meta-g{font-size:10px;line-height:2;color:#444}
+.meta-g b{display:block;font-size:9px;color:${c.primary};text-transform:uppercase;letter-spacing:1.5px;margin-bottom:2px}
+th{background:${c.primary}12;color:${c.primary};padding:8px 14px;font-size:9px;text-transform:uppercase;letter-spacing:1px;font-weight:700;border-bottom:2px solid ${c.primary}}
+td{border-bottom:1px solid ${c.primary}15}
+.ftr-s{background:${c.primary}06;padding:14px;border-left:2px solid ${c.primary}33}`;
+
+    case 'lined': return base + `
+body{font-family:'Segoe UI','Helvetica Neue',sans-serif}
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:16px;margin-bottom:20px}
+.hdr-co{font-size:10px;color:#666;line-height:1.8}
+.hdr-co b{font-size:14px;color:#222;display:block;margin-bottom:4px;font-weight:700;letter-spacing:0.3px}
+.hdr-type{font-size:16px;font-weight:700;color:${c.primary};text-transform:uppercase;letter-spacing:3px;border:2px solid ${c.primary};padding:6px 16px}
+.hdr-num{font-size:10px;color:#999;margin-top:6px;text-align:right;letter-spacing:0.5px}
+.meta{display:flex;justify-content:space-between;padding:12px 0;margin-bottom:20px;border-top:1px dotted #ccc;border-bottom:1px dotted #ccc}
+.meta-g{font-size:10px;line-height:2;color:#555}
+.meta-g b{display:block;font-size:9px;color:${c.primary};text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+th{background:transparent;color:#333;padding:8px 14px;font-size:8px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;border-bottom:2px solid #333;border-top:2px solid #333}
+td{border-bottom:1px dotted #ddd}
+tr:nth-child(even) td{background:transparent}
+.ftr-s{background:transparent;border-top:1px dotted #ccc;padding-top:14px}
+.tots-r{border-bottom:1px dotted #ddd}
+.tots-r.total{border-top:2px solid #333;border-bottom:none}`;
+
+    case 'premium': return base + `
+body{font-family:'Garamond','Georgia','Times New Roman',serif}
+.page::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#B8860B,#DAA520,#B8860B)}
+.page::after{content:'';position:absolute;top:24px;right:48px;font-size:10px;color:#B8860B;letter-spacing:3px;text-transform:uppercase;content:'PREMIUM'}
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;padding:16px 0 20px;margin-bottom:20px;border-bottom:1px solid #B8860B44}
+.hdr-co{font-size:10px;color:#555;line-height:1.8}
+.hdr-co b{font-size:17px;color:#222;display:block;margin-bottom:4px;font-family:'Garamond','Georgia',serif;letter-spacing:1px}
+.hdr-type{font-size:22px;font-weight:700;color:#B8860B;text-transform:uppercase;letter-spacing:4px;font-family:'Garamond','Georgia',serif}
+.hdr-num{font-size:10px;color:#B8860B88;margin-top:4px;letter-spacing:1px}
+.meta{display:flex;justify-content:space-between;padding:14px 18px;margin-bottom:20px;background:#FFFBF0;border-left:3px solid #B8860B}
+.meta-g{font-size:10px;line-height:2;color:#555}
+.meta-g b{display:block;font-size:9px;color:#B8860B;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:2px}
+th{background:#2C2C2C;color:#DAA520;padding:8px 14px;font-size:9px;text-transform:uppercase;letter-spacing:1.5px;font-weight:400;font-family:'Garamond','Georgia',serif}
+.ftr-s{background:#FFFBF0;border-left:2px solid #B8860B;padding:14px}
+.tots-r.total{color:#B8860B;border-top:2px solid #B8860B}
+.stamp-l{border-color:#B8860B}`;
+
     default: return base;
   }
 };

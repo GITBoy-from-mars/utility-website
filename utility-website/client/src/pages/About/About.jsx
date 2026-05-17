@@ -30,7 +30,7 @@ const About = () => (
           </div>
           <div className="about-stats-panel">
             <div className="about-stat-card">
-              <span className="about-stat-num">114+</span>
+              <span className="about-stat-num">117+</span>
               <span className="about-stat-label">Free Tools</span>
             </div>
             <div className="about-stat-card">

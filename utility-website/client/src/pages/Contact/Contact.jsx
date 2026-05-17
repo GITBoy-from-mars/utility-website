@@ -15,7 +15,7 @@ const Contact = () => {
 
   return (
     <>
-      <SEOHead title="Contact Us" description="Get in touch with the UtiliTools team. We'd love to hear from you." slug="/contact" />
+      <SEOHead title="Contact Us — Get in Touch" description="Have questions, feedback, or a partnership inquiry? Contact the UtiliTools team. We respond within 24-48 hours." slug="/contact" />
       <main className="contact-page">
         <section className="contact-hero"><div className="container"><h1>Contact Us</h1><p className="contact-hero-sub">Have questions, feedback, or a partnership inquiry? We would love to hear from you.</p></div></section>
         <section className="contact-content container">

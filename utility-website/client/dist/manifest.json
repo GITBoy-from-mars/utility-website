@@ -1,0 +1,12 @@
+{
+  "name": "UtiliTools — Free Online Utility Tools",
+  "short_name": "UtiliTools",
+  "description": "Convert, compress, and edit documents, images, and more. 100+ free tools, no sign-up required.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563EB",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

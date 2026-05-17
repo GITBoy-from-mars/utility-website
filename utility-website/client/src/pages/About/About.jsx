@@ -6,7 +6,7 @@ import './About.css';
 
 const About = () => (
   <>
-    <SEOHead title="About Us" description={`Learn about ${siteConfig.name} — free online utility tools built with privacy and speed in mind.`} slug="/about" />
+    <SEOHead title="About Us — Our Mission & Values" description={`Learn about ${siteConfig.name} — 100+ free online utility tools built with privacy and speed in mind. No sign-up required.`} slug="/about" />
     <main className="about-page">
       <section className="about-hero">
         <div className="container">

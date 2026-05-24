@@ -44,10 +44,13 @@ Object.entries(blogModules).forEach(([path, rawContent]) => {
     categoryName,
     title: meta.title || filename.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
     excerpt: meta.excerpt || content.replace(/<[^>]*>/g, '').substring(0, 160) + '...',
+    description: meta.description || meta.excerpt || content.replace(/<[^>]*>/g, '').substring(0, 160) + '...',
     date: meta.date || '2026-01-01',
     author: meta.author || 'Admin',
     image: meta.image || null,
     tags: meta.tags || [],
+    keywords: meta.keywords || '',
+    focusKeyword: meta.focusKeyword || '',
     content,
     path: `/blog/${categoryFolder}/${slug}`,
   });

@@ -17,10 +17,11 @@ const ToolPageWrapper = ({ meta, children }) => {
   const faqs = meta.faqs || getToolFAQs(meta.slug);
   const howTo = meta.howTo || getToolHowTo(meta.slug);
 
-  /* Per-page SEO title format: "Tool Name - Free Online Tool | UtiliTools" */
-  const seoTitle = `${meta.name} - Free Online ${meta.name.includes('Tool') ? '' : 'Tool'} | ${siteConfig.name}`;
-  const seoDesc = `${meta.description}. Free, no sign-up required. Use ${meta.name} online with ${siteConfig.name}.`;
-  const seoKeywords = [
+  /* Per-page SEO — use seo.js overrides if available, otherwise auto-generate */
+  const seo = meta.seo || {};
+  const seoTitle = seo.title || `${meta.name} - Free Online ${meta.name.includes('Tool') ? '' : 'Tool'} | ${siteConfig.name}`;
+  const seoDesc = seo.description || `${meta.description}. Free, no sign-up required. Use ${meta.name} online with ${siteConfig.name}.`;
+  const seoKeywords = seo.keywords || [
     ...(meta.keywords || []),
     'free online tool',
     'no signup',
@@ -28,6 +29,8 @@ const ToolPageWrapper = ({ meta, children }) => {
     `${meta.name.toLowerCase()} online`,
     `free ${meta.name.toLowerCase()}`,
   ].join(', ');
+  const seoImage = seo.image || '';
+  const seoFocusKeyword = seo.focusKeyword || '';
   const toolUrl = `${siteConfig.url}/tools/${meta.slug}`;
 
   /* JSON-LD: WebApplication + FAQ combined schema */
@@ -94,7 +97,9 @@ const ToolPageWrapper = ({ meta, children }) => {
         description={seoDesc}
         slug={`/tools/${meta.slug}`}
         keywords={seoKeywords}
+        image={seoImage}
       />
+      {seoFocusKeyword && <meta name="focus-keyword" content={seoFocusKeyword} />}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />}

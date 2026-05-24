@@ -231,7 +231,6 @@
 }
 
 .header-mobile-menu {
-  display: none;
   position: fixed;
   top: 64px;
   left: 0;
@@ -331,7 +330,6 @@
   .header-nav { display: none; }
   .header-search-btn { width: 32px; height: 32px; }
   .header-mobile-btn { display: block; }
-  .header-mobile-menu { display: block; }
   .header-related-inner { padding: 4px 16px; }
   .header-related-tools { flex-wrap: wrap; gap: 6px; }
   .header-inner { padding: 0 16px; }

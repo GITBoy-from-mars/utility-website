@@ -19,7 +19,7 @@ const Contact = () => {
       <main className="contact-page">
         <section className="contact-hero"><div className="container"><h1>Contact Us</h1><p className="contact-hero-sub">Have questions, feedback, or a partnership inquiry? We would love to hear from you.</p></div></section>
         <section className="contact-content container">
-          <div className="contact-grid">
+          <div className="contact-grid" style={{ gridTemplateColumns: '1fr' }}>
             <div className="contact-info">
               <div className="contact-info-card">
                 <Icon name="Mail" size={22} className="contact-info-icon" />
@@ -34,6 +34,7 @@ const Contact = () => {
                 <div><h3>Support</h3><p>{siteConfig.contact.supportEmail}</p></div>
               </div>
             </div>
+            {/* FORM HIDDEN — uncomment when backend is ready
             <div className="contact-form-wrap">
               {submitted ? (
                 <div className="contact-success">
@@ -54,6 +55,7 @@ const Contact = () => {
                 </form>
               )}
             </div>
+            */}
           </div>
         </section>
       </main>

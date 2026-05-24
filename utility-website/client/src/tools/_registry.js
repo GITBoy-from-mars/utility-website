@@ -10,6 +10,7 @@
 
 const metaModules = import.meta.glob('./*/meta.js', { eager: true });
 const componentModules = import.meta.glob('./*/index.jsx', { eager: true });
+const seoModules = import.meta.glob('./*/seo.js', { eager: true });
 
 const tools = [];
 
@@ -19,10 +20,13 @@ Object.entries(metaModules).forEach(([path, mod]) => {
   
   const compPath = `./${folderName}/index.jsx`;
   const compMod = componentModules[compPath];
+  const seoPath = `./${folderName}/seo.js`;
+  const seoMod = seoModules[seoPath];
   
   if (meta && compMod) {
     tools.push({
       ...meta,
+      seo: seoMod?.default || null,
       component: compMod.default,
       path: `/tools/${meta.slug}`,
     });

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import SEOHead from '../../components/common/SEOHead';
 import { getPostBySlug, getPostsByCategory, getRecentPosts, getAllCategories } from '../../blog/_registry';
 import siteConfig from '../../config/siteConfig';
 import './Blog.css';
@@ -37,6 +38,18 @@ const BlogPost = () => {
   const recentPosts = getRecentPosts(5).filter(p => p.slug !== slug).slice(0, 4);
   const categories = getAllCategories();
 
+  const blogJsonLd = {
+    '@context': 'https://schema.org', '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.description || post.excerpt,
+    datePublished: post.date,
+    author: { '@type': 'Person', name: post.author },
+    publisher: { '@type': 'Organization', name: siteConfig.name, url: siteConfig.url },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${siteConfig.url}${post.path}` },
+    ...(post.image && { image: `${siteConfig.url}${post.image}` }),
+    ...(post.keywords && { keywords: post.keywords }),
+  };
+
   const addComment = async (e) => {
     e.preventDefault();
     if (!commentName.trim() || !commentEmail.trim() || !commentText.trim()) return;
@@ -55,17 +68,17 @@ const BlogPost = () => {
 
   return (
     <>
+      <SEOHead
+        title={`${post.title} | ${siteConfig.name} Blog`}
+        description={post.description || post.excerpt}
+        slug={post.path}
+        keywords={post.keywords}
+        image={post.image}
+        type="article"
+      />
+      {post.focusKeyword && <meta name="focus-keyword" content={post.focusKeyword} />}
       <Helmet>
-        <title>{post.title} | {siteConfig.name} Blog</title>
-        <meta name="description" content={post.excerpt} />
-        <meta property="og:title" content={post.title} />
-        <meta property="og:description" content={post.excerpt} />
-        <meta property="og:type" content="article" />
-        <script type="application/ld+json">{JSON.stringify({
-          '@context': 'https://schema.org', '@type': 'BlogPosting',
-          headline: post.title, description: post.excerpt, datePublished: post.date,
-          author: { '@type': 'Person', name: post.author },
-        })}</script>
+        <script type="application/ld+json">{JSON.stringify(blogJsonLd)}</script>
       </Helmet>
 
       <div className="blog-page container-lg">

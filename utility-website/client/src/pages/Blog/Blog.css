@@ -150,3 +150,49 @@
   .blog-breadcrumb { font-size: 0.625rem; }
   .blog-comment-form div[style] { flex-direction: column; }
 }
+
+/* Interlinking Link Hover Underline & Color */
+.blog-article-content a {
+  color: #2563EB;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+.blog-article-content a:hover {
+  text-decoration: underline !important;
+  text-decoration-color: #2563EB !important;
+  color: #1D4ED8;
+}
+
+/* Pagination Styling */
+.blog-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--neutral-200);
+}
+.blog-page-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--neutral-300);
+  background: #fff;
+  color: var(--neutral-700);
+  font-size: 0.813rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.blog-page-btn:hover:not(:disabled) {
+  border-color: var(--neutral-900);
+  color: var(--neutral-900);
+}
+.blog-page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.blog-page-info {
+  font-size: 0.875rem;
+  color: var(--neutral-500);
+}

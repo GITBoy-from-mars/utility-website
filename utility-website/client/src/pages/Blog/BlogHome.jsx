@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { getAllPosts, getAllCategories, getRecentPosts } from '../../blog/_registry';
@@ -11,6 +11,13 @@ const BlogHome = () => {
   const recentPosts = getRecentPosts(6);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 15;
+
+  // Reset page to 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeCategory, searchQuery]);
 
   const filteredPosts = useMemo(() => {
     let result = activeCategory === 'all' ? allPosts : allPosts.filter(p => p.category === activeCategory);
@@ -20,6 +27,13 @@ const BlogHome = () => {
     }
     return result;
   }, [allPosts, activeCategory, searchQuery]);
+
+  const totalPages = Math.ceil(filteredPosts.length / itemsPerPage);
+
+  const paginatedPosts = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredPosts.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredPosts, currentPage, itemsPerPage]);
 
   const featuredPost = recentPosts[0];
 
@@ -61,7 +75,7 @@ const BlogHome = () => {
             <div className="blog-main">
               {/* Featured Post */}
               {featuredPost && (
-                <Link to={featuredPost.path} className="blog-featured">
+                <Link to={featuredPost.path} target="_blank" rel="noopener noreferrer" className="blog-featured">
                   {featuredPost.image && <div className="blog-featured-img" style={{ backgroundImage: `url(${featuredPost.image})` }} />}
                   <div className="blog-featured-content">
                     <span className="blog-badge">{featuredPost.categoryName}</span>
@@ -91,8 +105,8 @@ const BlogHome = () => {
 
               {/* Post Grid */}
               <div className="blog-grid">
-                {filteredPosts.map(post => (
-                  <Link key={post.slug + post.category} to={post.path} className="blog-card">
+                {paginatedPosts.map(post => (
+                  <Link key={post.slug + post.category} to={post.path} target="_blank" rel="noopener noreferrer" className="blog-card">
                     {post.image ? <div className="blog-card-img" style={{ backgroundImage: `url(${post.image})` }} /> : <div className="blog-card-img blog-card-img-placeholder"><span>{post.title.charAt(0)}</span></div>}
                     <div className="blog-card-body">
                       <span className="blog-badge blog-badge-sm">{post.categoryName}</span>
@@ -108,6 +122,27 @@ const BlogHome = () => {
                 ))}
               </div>
               {filteredPosts.length === 0 && <p className="blog-no-results">No posts found matching your criteria.</p>}
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="blog-pagination">
+                  <button 
+                    className="blog-page-btn" 
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} 
+                    disabled={currentPage === 1}
+                  >
+                    Previous
+                  </button>
+                  <span className="blog-page-info">Page {currentPage} of {totalPages}</span>
+                  <button 
+                    className="blog-page-btn" 
+                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} 
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Sidebar */}
@@ -126,7 +161,7 @@ const BlogHome = () => {
                 <h3 className="blog-sidebar-title">Recent Posts</h3>
                 <div className="blog-sidebar-recent">
                   {recentPosts.slice(0, 4).map(post => (
-                    <Link key={post.slug} to={post.path} className="blog-sidebar-post">
+                    <Link key={post.slug} to={post.path} target="_blank" rel="noopener noreferrer" className="blog-sidebar-post">
                       <span className="blog-sidebar-post-title">{post.title}</span>
                       <time className="blog-sidebar-post-date">{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</time>
                     </Link>

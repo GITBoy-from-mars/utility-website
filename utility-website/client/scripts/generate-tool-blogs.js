@@ -107,6 +107,10 @@ function generateToolBlogHTML(tool, allTools) {
   const fallbackTools = allTools.filter((t) => t.slug !== slug).slice(0, 3);
   const interlinkTargets = relatedTools.length >= 2 ? relatedTools : fallbackTools;
 
+  const target0 = interlinkTargets[0];
+  const target1 = interlinkTargets[1] || fallbackTools[0];
+  const target2 = interlinkTargets[2] || fallbackTools[1];
+
   // Generate unique SEO titles and meta descriptions
   const seoTitles = [
     `The Definitive Guide to Online ${name} | Free Helper`,
@@ -222,7 +226,7 @@ function generateToolBlogHTML(tool, allTools) {
     faqList = [
       { q: `Will my layout formatting break when using the ${name}?`, a: `No. Our formatting engine reads document layouts carefully to ensure font sizes, alignments, and images remain clean and accurate.` },
       { q: `Can I upload large files here?`, a: `Yes! Since the processing occurs client-side inside your browser sandbox, your browser's processing speed and device RAM are the only limiting factors.` },
-      { q: `Do you have similar document utilities?`, a: `Certainly. You can look at the <a href="/tools/${interlinkTargets[0].slug}">${interlinkTargets[0].name}</a> to streamline similar workflows.` }
+      { q: `Do you have similar document utilities?`, a: `Certainly. You can look at the <a href="/tools/${target0.slug}">${target0.name}</a> to streamline similar workflows.` }
     ];
   } else if (cat === 'compression') {
     intros = [
@@ -257,7 +261,7 @@ function generateToolBlogHTML(tool, allTools) {
     faqList = [
       { q: `Does this compression reduce image visibility?`, a: `We remove redundant metadata and invisible byte chunks. Visual quality remains pristine for general screens and digital displays.` },
       { q: `Is it safe to compress private photos here?`, a: `Absolutely. Since the calculations occur locally, your files are never uploaded to our servers.` },
-      { q: `Where can I compress other file formats?`, a: `We host a suite of tools. Try our <a href="/tools/${interlinkTargets[0].slug}">${interlinkTargets[0].name}</a> for similar optimizations.` }
+      { q: `Where can I compress other file formats?`, a: `We host a suite of tools. Try our <a href="/tools/${target0.slug}">${target0.name}</a> for similar optimizations.` }
     ];
   } else if (cat === 'developer-tools' || cat === 'generators') {
     intros = [
@@ -292,7 +296,7 @@ function generateToolBlogHTML(tool, allTools) {
     faqList = [
       { q: `Are the passwords or keys generated here truly random?`, a: `Yes. We use the browser's cryptographically secure pseudo-random number generator (CSPRNG) APIs for absolute security.` },
       { q: `Can I use this utility offline?`, a: `Yes. As a client-side SPA, you can continue to generate and parse strings even if your network connection goes down.` },
-      { q: `Where can I generate other assets?`, a: `You can use our <a href="/tools/${interlinkTargets[0].slug}">${interlinkTargets[0].name}</a> to generate and format other developer variables.` }
+      { q: `Where can I generate other assets?`, a: `You can use our <a href="/tools/${target0.slug}">${target0.name}</a> to generate and format other developer variables.` }
     ];
   } else if (cat === 'calculators' || cat === 'financial-tools') {
     intros = [
@@ -327,7 +331,7 @@ function generateToolBlogHTML(tool, allTools) {
     faqList = [
       { q: `Is my financial data uploaded anywhere?`, a: `No. All calculations are executed locally inside your browser sandbox. No parameters are uploaded.` },
       { q: `What guidelines are used for these calculators?`, a: `We follow standard accounting formulas used in global banking systems to guarantee mathematical accuracy.` },
-      { q: `Do you have tools for other calculations?`, a: `Yes! Explore the <a href="/tools/${interlinkTargets[0].slug}">${interlinkTargets[0].name}</a> for additional financial calculators.` }
+      { q: `Do you have tools for other calculations?`, a: `Yes! Explore the <a href="/tools/${target0.slug}">${target0.name}</a> for additional financial calculators.` }
     ];
   } else {
     // Default fallback templates
@@ -363,7 +367,7 @@ function generateToolBlogHTML(tool, allTools) {
     faqList = [
       { q: `Do I need to sign up to use the ${name}?`, a: `No. All our tools are fully open and accessible without user registration or email capture.` },
       { q: `Is my personal information secure?`, a: `Completely. All calculations and text processing happen locally. We do not store or track your inputs.` },
-      { q: `What other utility tools are available?`, a: `We provide a comprehensive library. Check out the <a href="/tools/${interlinkTargets[0].slug}">${interlinkTargets[0].name}</a> to optimize other parts of your workflow.` }
+      { q: `What other utility tools are available?`, a: `We provide a comprehensive library. Check out the <a href="/tools/${target0.slug}">${target0.name}</a> to optimize other parts of your workflow.` }
     ];
   }
 
@@ -411,8 +415,8 @@ function generateToolBlogHTML(tool, allTools) {
   ][wordingIdx];
 
   // Interlinking inside content: Link to another blog or related tool page
-  const interlinkBlogUrl = `/blog/${interlinkTargets[1].category}/${interlinkTargets[1].slug}`;
-  const interlinkBlogName = `${interlinkTargets[1].name} Guide`;
+  const interlinkBlogUrl = `/blog/${target1.category}/${target1.slug}`;
+  const interlinkBlogName = `${target1.name} Guide`;
 
   // Outline Blueprints
   let blogBodyHtml = '';
@@ -441,7 +445,7 @@ function generateToolBlogHTML(tool, allTools) {
   <li>${steps[2]}</li>
   <li>${steps[3]}</li>
 </ol>
-<p>It really is that simple! For other related guides, you can also check out our comprehensive <a href="${interlinkBlogUrl}">${interlinkBlogName}</a>.</p>
+<p>It really is that simple! For other related guides, you can also check out our comprehensive <a href="${interlinkBlogUrl}">${interlinkBlogName}</a>. Additionally, you might find our <a href="/tools/${target0.slug}">${target0.name}</a> and <a href="/tools/${target2.slug}">${target2.name}</a> exceptionally helpful for similar administrative tasks.</p>
 
 <h2>${headingsTech[wordingIdx]}</h2>
 <p>${selectedTechIntro}</p>
@@ -514,7 +518,7 @@ function generateToolBlogHTML(tool, allTools) {
   <li>${steps[2]}</li>
   <li>${steps[3]}</li>
 </ol>
-<p>Once downloaded, your files are immediately ready for use. Feel free to explore other guides such as our <a href="${interlinkBlogUrl}">${interlinkBlogName}</a>.</p>
+<p>Once downloaded, your files are immediately ready for use. Feel free to explore other guides such as our <a href="${interlinkBlogUrl}">${interlinkBlogName}</a>. If you need a different set of functionalities, our <a href="/tools/${target0.slug}">${target0.name}</a> and <a href="/tools/${target2.slug}">${target2.name}</a> are great next steps.</p>
 
 <h2>${headingsIntro[wordingIdx]}</h2>
 <p>${selectedIntro}</p>
@@ -577,7 +581,7 @@ function generateToolBlogHTML(tool, allTools) {
   <li>${steps[2]}</li>
   <li>${steps[3]}</li>
 </ol>
-<p>You can also check out related workflows such as the <a href="${interlinkBlogUrl}">${interlinkBlogName}</a>.</p>
+<p>You can also check out related workflows such as the <a href="${interlinkBlogUrl}">${interlinkBlogName}</a> or optimize your files using our <a href="/tools/${target0.slug}">${target0.name}</a> and <a href="/tools/${target2.slug}">${target2.name}</a>.</p>
 
 <h2>${headingsAlts[wordingIdx]}</h2>
 <p>${selectedAltIntro}</p>
@@ -662,7 +666,7 @@ function generateToolBlogHTML(tool, allTools) {
   <li>${benefitsList[1]}</li>
   <li>${benefitsList[2]}</li>
 </ul>
-<p>Check out our related development tutorial in the <a href="${interlinkBlogUrl}">${interlinkBlogName}</a>.</p>
+<p>Check out our related development tutorial in the <a href="${interlinkBlogUrl}">${interlinkBlogName}</a>, or utilize the <a href="/tools/${target0.slug}">${target0.name}</a> and <a href="/tools/${target2.slug}">${target2.name}</a> during your next project sprint.</p>
 
 <h2>${headingsAlts[wordingIdx]}</h2>
 <p>${selectedAltIntro}</p>
@@ -729,7 +733,7 @@ function generateToolBlogHTML(tool, allTools) {
   <li>${featuresList[2]}</li>
   <li>${featuresList[3]}</li>
 </ul>
-<p>If you are looking for other guides, explore the popular <a href="${interlinkBlogUrl}">${interlinkBlogName}</a>.</p>
+<p>If you are looking for other guides, explore the popular <a href="${interlinkBlogUrl}">${interlinkBlogName}</a>. Alternatively, you can use our <a href="/tools/${target0.slug}">${target0.name}</a> and <a href="/tools/${target2.slug}">${target2.name}</a> to expand your capabilities.</p>
 
 <h2>${headingsTech[wordingIdx]}</h2>
 <p>${selectedTechIntro}</p>
@@ -750,8 +754,11 @@ function generateToolBlogHTML(tool, allTools) {
 `;
   }
 
+  // Ensure every link in body has target="_blank" and rel="noopener noreferrer" automatically
+  const bodyWithBlankLinks = blogBodyHtml.replace(/<a\b(?!([^>]*?)target=)([^>]*?)href=/gi, '<a$2 target="_blank" rel="noopener noreferrer" href=');
+
   const html = `<!-- BLOG_META {"title":"${seoTitle}","excerpt":"${metaDesc}","date":"2026-05-24","author":"UtiliTools Team","image":"${featuredImage}","tags":["${cat}","${slug}","seo","free-tool"],"keywords":"${keywords.join(', ')}, ${name.toLowerCase()}","focusKeyword":"${name.toLowerCase()}"} -->
-${blogBodyHtml}`;
+${bodyWithBlankLinks}`;
 
   return html;
 }
@@ -801,7 +808,7 @@ function interlinkExistingBlogs(tools) {
           // Replace first occurrence of term in body with anchor link naturally
           const escapedTerm = link.term.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
           const regex = new RegExp(`(?<!<a[^>]*?>)\\b${escapedTerm}\\b(?![^<]*?</a>)`, 'i');
-          body = body.replace(regex, `<a href="/tools/${link.slug}">${link.term}</a>`);
+          body = body.replace(regex, `<a target="_blank" rel="noopener noreferrer" href="/tools/${link.slug}">${link.term}</a>`);
         }
         
         content = metaComment + body;

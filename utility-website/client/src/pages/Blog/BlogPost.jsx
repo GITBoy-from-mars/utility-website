@@ -113,7 +113,7 @@ const BlogPost = () => {
                 <h3 className="blog-related-title">Related Posts in {post.categoryName}</h3>
                 <div className="blog-related-grid">
                   {relatedPosts.map(rp => (
-                    <Link key={rp.slug} to={rp.path} className="blog-related-card">
+                    <Link key={rp.slug} to={rp.path} target="_blank" rel="noopener noreferrer" className="blog-related-card">
                       <h4>{rp.title}</h4>
                       <time>{new Date(rp.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</time>
                     </Link>
@@ -160,7 +160,7 @@ const BlogPost = () => {
               <h3 className="blog-sidebar-title">Recent Posts</h3>
               <div className="blog-sidebar-recent">
                 {recentPosts.map(rp => (
-                  <Link key={rp.slug} to={rp.path} className="blog-sidebar-post">
+                  <Link key={rp.slug} to={rp.path} target="_blank" rel="noopener noreferrer" className="blog-sidebar-post">
                     <span className="blog-sidebar-post-title">{rp.title}</span>
                     <time className="blog-sidebar-post-date">{new Date(rp.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</time>
                   </Link>
